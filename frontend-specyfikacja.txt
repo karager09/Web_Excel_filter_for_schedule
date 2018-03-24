@@ -1,0 +1,13 @@
+Nasza aplikacja webowa powinna zawieraæ 4 formularze przeznaczone dla zwyk³ego u¿ytkownika i jedna dla administratora:
+
+- strona startowa – mo¿na bêdzie na niej wpisaæ nazwisko prowadz¹cego, dla którego szukamy informacji (je¿eli jest ono wieloznaczne bêdziemy poproszeni równie¿ o imiê). Bêdzie na niej równie¿ odnoœnik od strony z logowaniem (¿eby potwierdziæ to¿samoœæ administratora)
+
+- strona wyboru informacji – po wpisaniu konkretnego prowadz¹cego bêdziemy poproszeni o dokonanie specyfikacji tego, co nas interesuje. Zatem (w formie checkboxów, rozwijanych list itd.) podajemy, które informacje maj¹ zostaæ dla nas przygotowane i w jakiej formie
+
+- ekstrakt z Excela – tutaj bêd¹ informacje, których potrzebujemy (w formie tabelki lub innej, któr¹ podaliœmy wczeœniej). Bêdzie z niej mo¿na dokonaæ powrotu do strony z ustawieniami, tak ¿eby w prosty sposób zmieniæ co chcielibyœmy widzieæ
+
+- logowanie – strona do podania has³a aby przejœæ do panelu administratora. W razie podanego z³ego has³a, bêdzie mo¿liwoœæ jego zmiany (i wys³ania go na wczeœniej wyspecyfikowanego e-maila)
+
+- panel administratora – bêdzie mo¿liwoœæ przes³ania (podmiany) pliku, z którego korzystamy (ewentualne usuniêcie) oraz podanie gdzie znajduj¹ siê w nim interesuj¹ce nas informacje (w których komórkach s¹ nazwiska prowadz¹cych itd)
+
+
