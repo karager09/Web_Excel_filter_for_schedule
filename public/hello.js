@@ -20,7 +20,7 @@ function wyslij()
         data : JSON.stringify({
             content : 'Hi there',
             id : 90
-        }),
+        })
         // success: alert("xd"),
         // failure: alert("xd2")
 
@@ -49,9 +49,26 @@ nieMaTakiegoUzytkownika();
 }
 
 function nieMaTakiegoUzytkownika(){
-    $("#main").prepend("<h2>Podałeś złe dane!</h2>");
+    $("#blad").html("<h2>Podałeś złe dane!</h2>");
 
     $("#nazwisko").val('');
     $('#imie').val('');
+}
+
+function wyslij_haslo(){
+    zle_haslo();
+}
+
+function zle_haslo(){
+    $("#blad").html("<h2>Podałeś złe hasło!</h2>");
+    $("#haslo").val('');
+
+    $("#przypomnienie").html('<button class="btn btn-danger" type="button" onclick="przypomnij_haslo();">Zresetuj hasło</button>');
+
+}
+
+function przypomnij_haslo(){
+
+    $("#przypomnienie").html("Nowe hasło zostało wysłane");
 
 }
