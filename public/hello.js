@@ -12,7 +12,7 @@
 
 function wyslij()
 {
-    var name = $("#nazwisko").value();
+    //var name = $("#nazwisko").value();
 
     $.ajax({
         url: "http://localhost:8080/api/search",
@@ -20,7 +20,7 @@ function wyslij()
         type : "post",
         contentType : "application/json",
         data : JSON.stringify({
-            'lastName':'Szymkat'
+            lastName: 'Szymkat'
             //content : 'Hi there',
             //id : 90
         })
@@ -29,7 +29,7 @@ function wyslij()
 
     }).then(function(data, status, jqxhr) {
         $(document).write("Dostalem odpowiedz: "+data);
-       // $('.greeting-id').append(data.id);
+        //$('.greeting-id').append(data.id);
         //$('.greeting-content').append(data.content);
         //console.log(jqxhr);
     });

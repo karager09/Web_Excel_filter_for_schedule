@@ -37,9 +37,19 @@ public class SearchController {
     @PostMapping(value = "/api/search")
     public boolean searchResponse(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
         System.out.println("Searching");
-
         return Parser.findLecturerLastname(lecturer.getLastName());
-
     }
+
+    @PostMapping(value = "/api/search/specific")
+    public boolean searchResponse2(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
+        System.out.println("Searching");
+        return Parser.findLecturer(lecturer.getLastName(), lecturer.getFirstName());
+    }
+
+//    @GetMapping(value = "/{test}")
+//    public String searchResponse3(@PathVariable String test){
+//        System.out.print(test);
+//        return test;
+//    }
 
 }
