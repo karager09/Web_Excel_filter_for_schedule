@@ -1,36 +1,40 @@
-$(document).ready(function() {
-    $.ajax({
-        url: "http://localhost:8080/greeting"
-    }).then(function(data, status, jqxhr) {
-       //$('.greeting-id').append(data.id);
-       //$('.greeting-content').append(data.content);
-       console.log(jqxhr);
-    });
-});
+// $(document).ready(function() {
+//     $.ajax({
+//         url: "http://localhost:8080/greeting"
+//     }).then(function(data, status, jqxhr) {
+//        //$('.greeting-id').append(data.id);
+//        //$('.greeting-content').append(data.content);
+//        console.log(jqxhr);
+//     });
+// });
 
 
 
 function wyslij()
 {
+    var name = $("#nazwisko").value();
+
     $.ajax({
-        url: "http://localhost:8080/greeting",
+        url: "http://localhost:8080/api/search",
         datatype : 'json',
         type : "post",
         contentType : "application/json",
         data : JSON.stringify({
-            content : 'Hi there',
-            id : 90
+            'lastName':'Szymkat'
+            //content : 'Hi there',
+            //id : 90
         })
         // success: alert("xd"),
         // failure: alert("xd2")
 
     }).then(function(data, status, jqxhr) {
-        $('.greeting-id').append(data.id);
-        $('.greeting-content').append(data.content);
-        console.log(jqxhr);
+        $(document).write("Dostalem odpowiedz: "+data);
+       // $('.greeting-id').append(data.id);
+        //$('.greeting-content').append(data.content);
+        //console.log(jqxhr);
     });
 
-    potrzebaJeszczeImie();
+    //potrzebaJeszczeImie();
 }
 
 
