@@ -1,12 +1,19 @@
 package server;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.util.IOUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import parser.Lecturer;
 import parser.Parser;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class SearchController {
@@ -51,5 +58,28 @@ public class SearchController {
 //        System.out.print(test);
 //        return test;
 //    }
+
+
+
+    @RequestMapping(value = "/api/plik", method = RequestMethod.POST, produces = {"application/json"})
+    public @ResponseBody boolean echoFile(MultipartHttpServletRequest request,
+                                                          HttpServletResponse response) throws Exception {
+
+
+        System.out.println("Próba przesłania pliku");
+        MultipartFile multipartFile = request.getFile("plik");
+        Long size = multipartFile.getSize();
+        String contentType = multipartFile.getContentType();
+        InputStream stream = multipartFile.getInputStream();
+        byte[] bytes = IOUtils.toByteArray(stream);
+
+        try (FileOutputStream fos = new FileOutputStream("test_file.xlsx")) {
+            fos.write(bytes);
+        }
+
+        return true;
+    }
+
+
 
 }

@@ -1,15 +1,3 @@
-// $(document).ready(function() {
-//     $.ajax({
-//         url: "http://localhost:8080/greeting"
-//     }).then(function(data, status, jqxhr) {
-//        //$('.greeting-id').append(data.id);
-//        //$('.greeting-content').append(data.content);
-//        console.log(jqxhr);
-//     });
-// });
-
-
-
 function wyslij()
 {
     var name = $("#nazwisko").val();
@@ -21,19 +9,11 @@ function wyslij()
         contentType : "application/json",
         data : JSON.stringify({
             lastName: name
-            //content : 'Hi there',
-            //id : 90
         })
-        // success: alert("xd"),
-        // failure: alert("xd2")
-
     }).then(function(data, status, jqxhr) {
         //document.write("Dostalem odpowiedz: "+data);
         if(data == true) document.write("Prowadzacy "+name+" istnieje!");
         else potrzebaJeszczeImie();
-        //$('.greeting-id').append(data.id);
-        //$('.greeting-content').append(data.content);
-        //console.log(jqxhr);
     });
 
 
@@ -93,5 +73,34 @@ function zle_haslo(){
 function przypomnij_haslo(){
 
     $("#przypomnienie").html("Nowe hasło zostało wysłane");
+
+}
+
+
+
+function przeslij_plik(){
+
+    var plik = $('#plik');
+
+    var filename = $.trim(plik.val());
+
+    if (!(filename.match(/xlsx$/i))) {
+        alert('Podaj plik z rozszerzeniem .xlsx!');
+        return;
+    }
+
+
+    $.ajax({
+        url: 'http://localhost:8080/api/plik',
+        type: "POST",
+        data: new FormData(document.getElementById("plikForm")),
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false
+    }).done(function(data) {
+        document.write("Plik przesłany!");
+    }).fail(function(jqXHR, textStatus) {
+        alert('File upload failed ...');
+    });
 
 }
