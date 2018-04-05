@@ -12,7 +12,7 @@
 
 function wyslij()
 {
-    //var name = $("#nazwisko").value();
+    var name = $("#nazwisko").val();
 
     $.ajax({
         url: "http://localhost:8080/api/search",
@@ -20,7 +20,7 @@ function wyslij()
         type : "post",
         contentType : "application/json",
         data : JSON.stringify({
-            lastName: 'Szymkat'
+            lastName: name
             //content : 'Hi there',
             //id : 90
         })
@@ -28,13 +28,15 @@ function wyslij()
         // failure: alert("xd2")
 
     }).then(function(data, status, jqxhr) {
-        $(document).write("Dostalem odpowiedz: "+data);
+        //document.write("Dostalem odpowiedz: "+data);
+        if(data == true) document.write("Prowadzacy "+name+" istnieje!");
+        else potrzebaJeszczeImie();
         //$('.greeting-id').append(data.id);
         //$('.greeting-content').append(data.content);
         //console.log(jqxhr);
     });
 
-    //potrzebaJeszczeImie();
+
 }
 
 
@@ -47,8 +49,25 @@ function potrzebaJeszczeImie(){
 }
 
 function wyslijZImieniem(){
-    //document.write("wysłano: " + $("#nazwisko").val() + ", "+ $("#imie").val());
-nieMaTakiegoUzytkownika();
+
+    var name = $("#nazwisko").val();
+    var imie = $("#imie").val();
+
+    $.ajax({
+        url: "http://localhost:8080/api/search",
+        datatype : 'json',
+        type : "post",
+        contentType : "application/json",
+        data : JSON.stringify({
+            lastName: name,
+            firstName: imie
+        })
+
+
+    }).then(function(data, status, jqxhr) {
+        if(data == true) document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
+        else nieMaTakiegoUzytkownika();
+    });
 
 }
 
