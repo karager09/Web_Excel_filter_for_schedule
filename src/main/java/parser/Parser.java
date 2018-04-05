@@ -23,7 +23,7 @@ public class Parser {
         Row row =  sheet.getRow(5);
         for(Cell cell : row){
             String cellValue = dataFormatter.formatCellValue(cell);
-            if(cellValue.equals(lastName)) counter++;
+            if(cellValue.equalsIgnoreCase(lastName)) counter++;
         }
         workbook.close();
 
