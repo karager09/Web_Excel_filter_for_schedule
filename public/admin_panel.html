@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<body>
+<body onload="pobierz_dane()">
 
 <div class="container">
 
@@ -24,21 +24,76 @@
 
     <div class="page-header" align="center"><h1>Panel administratora</h1></div>
 
-
     <div class="form-group" align="center" style="margin:auto;">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4" id="main">
-
-            <form id="plikForm">
+        <div class="col-12 col-sm-8 col-md-8 col-lg-8"  id="main">
+            <div class="col-12 col-sm-12 col-md-10 col-lg-8">
+            <form id="plikForm" >
                 <label for="plik">Podaj plik:</label>
                 <input type="file" class="form-control-file" name="plik" id="plik">
                 <br>
                 <button id="send" class="btn btn-primary" type="button" onclick="przeslij_plik();">Prześlij plik</button>
-            </form>
 
+            </form>
+            </div>
+            <br><br>
+
+            <form id="daneForm">
+
+                <div class="form-group row">
+                    <label for="nazwisko" class="col-sm-6 col-form-label">Numer wiersza dla nazwisk:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="nazwisko" placeholder="Numer wiersza">
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="imie" class="col-sm-6 col-form-label">Numer wiersza dla imion:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="imie" placeholder="Numer wiersza">
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="przedmioty_od" class="col-sm-6 col-form-label">Kolumny z informacjami o przedmiotach:</label>
+                    <div class="col-sm-6 row">
+                        <label for="przedmioty_od" class="col-sm-3 col-form-label">Od </label>
+                        <input type="text" class="form-control col-sm-3" id="przedmioty_od" placeholder="Cyfra">
+                        <label for="przedmioty_do" class="col-sm-3 col-form-label">Do </label>
+                        <input type="text" class="form-control col-sm-3" id="przedmioty_do" placeholder="Cyfra">
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <label for="podsumowanie_od" class="col-sm-6 col-form-label">Wiersze z podsumowaniem:</label>
+                    <div class="col-sm-6 row">
+                        <label for="podsumowanie_od" class="col-sm-3 col-form-label">Od </label>
+                        <input type="text" class="form-control col-sm-3" id="podsumowanie_od" placeholder="Cyfra">
+                        <label for="podsumowanie_do" class="col-sm-3 col-form-label">Do </label>
+                        <input type="text" class="form-control col-sm-3" id="podsumowanie_do" placeholder="Cyfra">
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="przedmioty" class="col-sm-6 col-form-label">Wiersz od którego zaczynają się przedmioty:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="przedmioty" placeholder="Numer wiersza">
+                    </div>
+                </div>
+
+
+                <button id="send2" class="btn btn-primary" type="button" onclick="przeslij_informacje();">Zatwierdź</button>
+
+            </form>
 
 
         </div>
     </div>
 </div>
+
 </body>
 </html>

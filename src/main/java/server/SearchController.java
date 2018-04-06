@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import parser.Lecturer;
 import parser.Parser;
+import parser.PlaceOfData;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,20 +67,36 @@ public class SearchController {
                                                           HttpServletResponse response) throws Exception {
 
 
-        System.out.println("Próba przesłania pliku");
+        //System.out.println("Próba przesłania pliku");
         MultipartFile multipartFile = request.getFile("plik");
         Long size = multipartFile.getSize();
         String contentType = multipartFile.getContentType();
         InputStream stream = multipartFile.getInputStream();
         byte[] bytes = IOUtils.toByteArray(stream);
 
-        try (FileOutputStream fos = new FileOutputStream("test_file.xlsx")) {
+        try (FileOutputStream fos = new FileOutputStream("src\\main\\resources\\test_file.xlsx")) {
             fos.write(bytes);
         }
 
         return true;
     }
 
+//TUTAJ MUSISZ WSTAWIC DANE, KTÓRE SĄ ZAPISANE NA SERWERZE, TAK ZEBYM JE WSTAWIL DO FORMULARZA
+    @GetMapping("/api/info")
+    public PlaceOfData pobierz_info() {
+        return new PlaceOfData(1,2,3,4,5,6,7);
+    }
+
+
+    //TUTAJ DOSTAJESZ NOWE DANE, WIEC MUSISZ JE GDZIES ZAPISAC
+    @PostMapping("/api/info")
+    public boolean zapisz_info(@RequestBody PlaceOfData placeOfData) {
+//        System.out.println(placeOfData.getNazwisko());
+//        System.out.println(placeOfData.getImie());
+//        System.out.println(placeOfData.getPrzedmioty());
+
+        return true;
+    }
 
 
 }
