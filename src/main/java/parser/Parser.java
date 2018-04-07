@@ -11,8 +11,17 @@ import java.util.Iterator;
 
 public class Parser {
 
-    private static final String FILE_NAME = "src/main/resources/KIS_2017_18_plan_v.1.2.7.xlsx";
+    private static final String FILE_NAME = "src/main/resources/rozklad.xlsx";
     private static Lecturer lecturer;
+    private static PlaceOfData data = null;
+
+    public static PlaceOfData getData() {
+        return data;
+    }
+
+    public static void setData(PlaceOfData data) {
+        Parser.data = data;
+    }
 
     public static boolean findLecturerLastname(String lastName) throws IOException, InvalidFormatException{
 
@@ -20,13 +29,14 @@ public class Parser {
         int counter = 0;
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
-        Row row =  sheet.getRow(5);
+        Row row =  sheet.getRow(data.getNazwisko()-1);
         for(Cell cell : row){
-            String cellValue = dataFormatter.formatCellValue(cell);
+            String cellValue = new String(dataFormatter.formatCellValue(cell)).trim();
+            //System.out.println(cellValue);
             if(cellValue.equalsIgnoreCase(lastName)) counter++;
         }
         workbook.close();
-
+        //System.out.println(counter);
         if(counter == 1) return true;
         else return false;
     }
@@ -35,13 +45,13 @@ public class Parser {
         Workbook workbook = WorkbookFactory.create(new File(FILE_NAME));
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
-        Row lastRow = sheet.getRow(5);
-        Row firstRow = sheet.getRow(4);
+        Row lastRow = sheet.getRow(data.getNazwisko()-1);
+        Row firstRow = sheet.getRow(data.getImie()-1);
         for (Cell cell : lastRow) {
-            String lastValue = dataFormatter.formatCellValue(cell);
+            String lastValue = new String(dataFormatter.formatCellValue(cell)).trim();
             if (lastValue.equalsIgnoreCase(lastName)) {
-                String firstValue = dataFormatter.formatCellValue(firstRow.getCell(cell.getColumnIndex()));
-                if (firstName.equalsIgnoreCase(firstName)) {
+                String firstValue = new String(dataFormatter.formatCellValue(firstRow.getCell(cell.getColumnIndex()))).trim();
+                if (firstValue.equalsIgnoreCase(firstName)) {
                     workbook.close();
                     return true;
                 }

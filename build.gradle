@@ -29,6 +29,8 @@ dependencies {
     testCompile("org.apache.httpcomponents:httpclient")
     compile group: 'org.apache.poi', name: 'poi', version: '3.17'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+   // compile("org.springframework.boot:spring-boot-starter-security")
+   // compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 
 
 }

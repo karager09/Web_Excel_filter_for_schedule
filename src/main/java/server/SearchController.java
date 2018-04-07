@@ -1,8 +1,6 @@
 package server;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -74,7 +72,7 @@ public class SearchController {
         InputStream stream = multipartFile.getInputStream();
         byte[] bytes = IOUtils.toByteArray(stream);
 
-        try (FileOutputStream fos = new FileOutputStream("src\\main\\resources\\test_file.xlsx")) {
+        try (FileOutputStream fos = new FileOutputStream("src\\main\\resources\\rozklad.xlsx")) {
             fos.write(bytes);
         }
 
@@ -84,16 +82,15 @@ public class SearchController {
 //TUTAJ MUSISZ WSTAWIC DANE, KTÓRE SĄ ZAPISANE NA SERWERZE, TAK ZEBYM JE WSTAWIL DO FORMULARZA
     @GetMapping("/api/info")
     public PlaceOfData pobierz_info() {
-        return new PlaceOfData(1,2,3,4,5,6,7);
+        return Parser.getData();
     }
 
 
     //TUTAJ DOSTAJESZ NOWE DANE, WIEC MUSISZ JE GDZIES ZAPISAC
     @PostMapping("/api/info")
-    public boolean zapisz_info(@RequestBody PlaceOfData placeOfData) {
-//        System.out.println(placeOfData.getNazwisko());
-//        System.out.println(placeOfData.getImie());
-//        System.out.println(placeOfData.getPrzedmioty());
+    public boolean zapisz_info(@RequestBody PlaceOfData placeOfData) throws IOException{
+        PlaceOfData.saveAsFile(placeOfData);
+        Parser.setData(placeOfData);
 
         return true;
     }

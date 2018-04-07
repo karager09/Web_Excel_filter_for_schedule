@@ -1,13 +1,15 @@
 package parser;
 
+import java.io.*;
+
 public class PlaceOfData {
-    int nazwisko;
-    int imie;
-    int przedmioty_od;
-    int przedmioty_do;
-    int podsumowanie_od;
-    int podsumowanie_do;
-    int przedmioty;
+    private int nazwisko;
+    private int imie;
+    private int przedmioty_od;
+    private int przedmioty_do;
+    private int podsumowanie_od;
+    private int podsumowanie_do;
+    private int przedmioty;
 
     public PlaceOfData() {
     }
@@ -22,6 +24,27 @@ public class PlaceOfData {
         this.przedmioty = przedmioty;
     }
 
+
+    public static void saveAsFile(PlaceOfData data) throws IOException {
+        File file = new File("src\\main\\resources\\data.txt");
+        PrintWriter printWriter = new PrintWriter(file);
+        printWriter.println(data.nazwisko);
+        printWriter.println(data.imie);
+        printWriter.println(data.przedmioty_od);
+        printWriter.println(data.przedmioty_do);
+        printWriter.println(data.podsumowanie_od);
+        printWriter.println(data.podsumowanie_do);
+        printWriter.println(data.przedmioty);
+        printWriter.close();
+    }
+
+
+    public static PlaceOfData readFromFile() throws IOException{
+        BufferedReader fileReader = new BufferedReader(new FileReader("src\\main\\resources\\data.txt"));
+        PlaceOfData place = new PlaceOfData(Integer.parseInt(fileReader.readLine()),Integer.parseInt(fileReader.readLine()),Integer.parseInt(fileReader.readLine()),Integer.parseInt(fileReader.readLine()),Integer.parseInt(fileReader.readLine()),Integer.parseInt(fileReader.readLine()),Integer.parseInt(fileReader.readLine()));
+        fileReader.close();
+        return place;
+    }
     public int getNazwisko() {
         return nazwisko;
     }

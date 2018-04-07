@@ -34,7 +34,7 @@ function wyslijZImieniem(){
     var imie = $("#imie").val();
 
     $.ajax({
-        url: "http://localhost:8080/api/search",
+        url: "http://localhost:8080/api/search/specific",
         datatype : 'json',
         type : "post",
         contentType : "application/json",
