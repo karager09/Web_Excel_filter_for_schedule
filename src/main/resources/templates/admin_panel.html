@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Plan zajęć</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="hello.js"></script>
+    <script type="text/javascript" src="js/hello.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -17,7 +18,10 @@
 <div class="container">
 
     <div class="navbar navbar-expand-sm bg-light">
-        <a href="index.html">Wróć</a>
+        <a href="index">Wróć</a>
+        <form th:action="@{/logout}" method="post">
+            <input href="index" type="submit" value="Wyloguj"/>
+        </form>
 
     </div>
 
@@ -27,13 +31,13 @@
     <div class="form-group" align="center" style="margin:auto;">
         <div class="col-12 col-sm-8 col-md-8 col-lg-8"  id="main">
             <div class="col-12 col-sm-12 col-md-10 col-lg-8">
-            <form id="plikForm" >
-                <label for="plik">Podaj plik:</label>
-                <input type="file" class="form-control-file" name="plik" id="plik">
-                <br>
-                <button id="send" class="btn btn-primary" type="button" onclick="przeslij_plik();">Prześlij plik</button>
+                <form id="plikForm" >
+                    <label for="plik">Podaj plik:</label>
+                    <input type="file" class="form-control-file" name="plik" id="plik">
+                    <br>
+                    <button id="send" class="btn btn-primary" type="button" onclick="przeslij_plik();">Prześlij plik</button>
 
-            </form>
+                </form>
             </div>
             <br><br>
 
