@@ -31,6 +31,9 @@
     <div class="form-group" align="center" style="margin:auto;">
         <div class="col-12 col-sm-8 col-md-6 col-lg-4" id="main">
             <div id="blad"></div>
+            <div th:if="${param.error}">
+                Invalid username and password.
+            </div>
             <form th:action="@{/login}" method="post">
                 <label> Login: <input type="text" class="form-control" name="username"/> </label>
                 <br>
