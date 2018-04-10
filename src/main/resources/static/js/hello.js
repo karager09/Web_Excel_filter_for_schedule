@@ -64,7 +64,7 @@ function wyslij_haslo(){
 }
 
 function dobre_haslo(){
-    window.location.href = "admin_panel.html";
+    window.location.href = "/src/main/resources/templates/admin_panel.html";
 
 
 }

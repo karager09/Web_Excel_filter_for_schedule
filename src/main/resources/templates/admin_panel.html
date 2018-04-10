@@ -18,11 +18,18 @@
 <div class="container">
 
     <div class="navbar navbar-expand-sm bg-light">
-        <a href="index">Wróć</a>
-        <form th:action="@{/logout}" method="post">
-            <input href="index" type="submit" value="Wyloguj"/>
-        </form>
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <a href="index">Wróć</a>
+        </div>
 
+        <div class="mx-auto order-0">
+        </div>
+
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <form th:action="@{/logout}" method="post" class="navbar-nav ml-auto">
+                <input href="index" type="submit" value="Wyloguj" class="btn btn-primary"/>
+            </form>
+        </div>
     </div>
 
 
