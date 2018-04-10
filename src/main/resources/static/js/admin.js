@@ -89,27 +89,25 @@ function przeslij_plik(){
 
 
 
-function wyslij_haslo(){
-    dobre_haslo();
-    //zle_haslo();
-}
-
-function dobre_haslo(){
-    window.location.href = "/src/main/resources/templates/admin_panel.html";
-
-
-}
-
-function zle_haslo(){
-    $("#blad").html("<h2>Podałeś złe hasło!</h2>");
-    $("#haslo").val('');
-
-    $("#przypomnienie").html('<button class="btn btn-danger" type="button" onclick="przypomnij_haslo();">Zresetuj hasło</button>');
-
-}
+// function wyslij_haslo(){
+//     dobre_haslo();
+//     //zle_haslo();
+// }
+//
+// function dobre_haslo(){
+//     window.location.href = "/src/main/resources/templates/admin_panel.html";
+//
+//
+// }
+//
+// function zle_haslo(){
+//     $("#blad").html("<h2>Podałeś złe hasło!</h2>");
+//     $("#haslo").val('');
+//
+//     $("#przypomnienie").html('<button class="btn btn-danger" type="button" onclick="przypomnij_haslo();">Zresetuj hasło</button>');
+//
+// }
 
 function przypomnij_haslo(){
-
-    $("#przypomnienie").html("Nowe hasło zostało wysłane");
-
+    alert("Nowe hasło zostanie wysłane");
 }
