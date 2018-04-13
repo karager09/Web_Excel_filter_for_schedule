@@ -41,9 +41,7 @@ public class SearchController {
 
 
     @RequestMapping(value = "/api/plik", method = RequestMethod.POST, produces = {"application/json"})
-    public @ResponseBody boolean echoFile(MultipartHttpServletRequest request,
-                                                          HttpServletResponse response) throws Exception {
-
+    public @ResponseBody boolean echoFile(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
 
         //System.out.println("Próba przesłania pliku");
         MultipartFile multipartFile = request.getFile("plik");
@@ -63,6 +61,19 @@ public class SearchController {
     @GetMapping("/api/info")
     public PlaceOfData pobierz_info() {
         return Parser.getData();
+    }
+
+
+    //INFO O TYM CO JEST DO WYBORU PRZY POKAZYWANIU
+    @GetMapping("/api/what_to_show")
+    public String [] pobierz_info_o_xml() {
+
+
+        String [] what= new String[2];
+        what[0] = "Ilość godzin";
+        what[1] = "Pensja";
+
+        return what;
     }
 
 

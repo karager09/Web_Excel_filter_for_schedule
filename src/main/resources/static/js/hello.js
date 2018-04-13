@@ -12,11 +12,14 @@ function wyslij()
         })
     }).then(function(data, status, jqxhr) {
         //document.write("Dostalem odpowiedz: "+data);
-        if(data == true) document.write("Prowadzacy "+name+" istnieje!");
+        if(data === true) //document.write("Prowadzacy "+name+" istnieje!");
+        {
+            localStorage.setItem("nazwisko", name);
+            window.location.href = "/info";
+
+        }
         else potrzebaJeszczeImie();
     });
-
-
 }
 
 
@@ -45,7 +48,13 @@ function wyslijZImieniem(){
 
 
     }).then(function(data, status, jqxhr) {
-        if(data == true) document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
+        if(data === true) //document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
+        {
+            localStorage.setItem("nazwisko", name);
+            localStorage.setItem("imie", imie)
+            window.location.href = "/info";
+
+        }
         else nieMaTakiegoUzytkownika();
     });
 
@@ -56,4 +65,38 @@ function nieMaTakiegoUzytkownika(){
 
     $("#nazwisko").val('');
     $('#imie').val('');
+}
+
+
+
+function dodaj_info(id){
+    //var id = "cos";
+    //id = localStorage.getItem("nazwisko");
+    $('#jakie_info').append('<div><input type="checkbox" class="filled-in form-check-input" id='+id+' checked="checked"> <label class="form-check-label" for='+id+'>'+id+'</label> </div><br>');
+
+}
+
+function dodaj_jakie_info(){
+
+    $.ajax({
+        url: "http://localhost:8080/api/what_to_show",
+        type : "get"
+    }).then(function(data) {
+        for(var i in data)
+        {
+            dodaj_info(data[i]);
+        }
+
+    });
+}
+
+
+function przeslij_jakie_info(){
+
+
+
+
+
+
+
 }

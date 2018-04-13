@@ -62,14 +62,11 @@ function pobierz_dane(){
 function przeslij_plik(){
 
     var plik = $('#plik');
-
     var filename = $.trim(plik.val());
-
     if (!(filename.match(/xlsx$/i))) {
         alert('Podaj plik z rozszerzeniem .xlsx!');
         return;
     }
-
 
     $.ajax({
         url: 'http://localhost:8080/api/plik',
@@ -83,7 +80,6 @@ function przeslij_plik(){
     }).fail(function(jqXHR, textStatus) {
         alert('File upload failed ...');
     });
-
 }
 
 
