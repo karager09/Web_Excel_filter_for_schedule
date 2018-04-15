@@ -3,7 +3,7 @@ function wyslij()
     var name = $("#nazwisko").val();
 
     $.ajax({
-        url: "http://localhost:8080/api/search",
+        url: "http://localhost:8080/api/search/lastname",
         datatype : 'json',
         type : "post",
         contentType : "application/json",
@@ -37,7 +37,7 @@ function wyslijZImieniem(){
     var imie = $("#imie").val();
 
     $.ajax({
-        url: "http://localhost:8080/api/search/specific",
+        url: "http://localhost:8080/api/search/fullname",
         datatype : 'json',
         type : "post",
         contentType : "application/json",

@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.IOUtils;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -14,19 +15,23 @@ import parser.PlaceOfData;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static parser.Parser.findData;
+import static parser.Parser.findLecturerColumn;
+import static parser.Parser.prepareData;
+
 @RestController
 public class SearchController {
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
-    @PostMapping(value = "/api/search")
+    @PostMapping(value = "/api/search/lastname")
     public boolean searchResponse(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
         System.out.println("Searching");
         return Parser.findLecturerLastname(lecturer.getLastName());
     }
 
-    @PostMapping(value = "/api/search/specific")
+    @PostMapping(value = "/api/search/fullname")
     public boolean searchResponse2(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
         System.out.println("Searching");
         return Parser.findLecturer(lecturer.getLastName(), lecturer.getFirstName());
@@ -40,8 +45,10 @@ public class SearchController {
 
 
 
-    @RequestMapping(value = "/api/plik", method = RequestMethod.POST, produces = {"application/json"})
-    public @ResponseBody boolean echoFile(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(value = "/api/calc/file", method = RequestMethod.POST, produces = {"application/json"})
+    public @ResponseBody boolean echoFile(MultipartHttpServletRequest request,
+                                                          HttpServletResponse response) throws Exception {
+
 
         //System.out.println("Próba przesłania pliku");
         MultipartFile multipartFile = request.getFile("plik");
@@ -58,7 +65,7 @@ public class SearchController {
     }
 
 //TUTAJ MUSISZ WSTAWIC DANE, KTÓRE SĄ ZAPISANE NA SERWERZE, TAK ZEBYM JE WSTAWIL DO FORMULARZA
-    @GetMapping("/api/info")
+    @GetMapping("/api/calc/info")
     public PlaceOfData pobierz_info() {
         return Parser.getData();
     }
@@ -66,24 +73,33 @@ public class SearchController {
 
     //INFO O TYM CO JEST DO WYBORU PRZY POKAZYWANIU
     @GetMapping("/api/what_to_show")
-    public String [] pobierz_info_o_xml() {
+    public String[] pobierz_info_o_xml() throws IOException, InvalidFormatException {
 
+        return findData();
+//        String [] what= new String[2];
+//        what[0] = "Ilość godzin";
+//        what[1] = "Pensja";
 
-        String [] what= new String[2];
-        what[0] = "Ilość godzin";
-        what[1] = "Pensja";
-
-        return what;
     }
 
 
-    //TUTAJ DOSTAJESZ NOWE DANE, WIEC MUSISZ JE GDZIES ZAPISAC
-    @PostMapping("/api/info")
+
+    @PostMapping("/api/calc/info")
     public boolean zapisz_info(@RequestBody PlaceOfData placeOfData) throws IOException{
         PlaceOfData.saveAsFile(placeOfData);
         Parser.setData(placeOfData);
 
         return true;
+    }
+
+    @PostMapping("/api/lecturer/{lastName}")
+    public String getLecruterData(@PathVariable String lastName, @RequestBody String[] data) throws IOException, InvalidFormatException {
+        return prepareData(findLecturerColumn(lastName),data).toString();
+    }
+
+    @PostMapping("/api/lecturer/{lastName}/{firstName}")
+    public String getLecruterData(@PathVariable String lastName, @PathVariable String firstName, @RequestBody String[] data) throws IOException, InvalidFormatException {
+        return prepareData(findLecturerColumn(lastName,firstName),data).toString();
     }
 
 

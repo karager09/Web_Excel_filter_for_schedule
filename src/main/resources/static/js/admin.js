@@ -12,7 +12,7 @@ function przeslij_informacje(){
 
 
         $.ajax({
-            url: "http://localhost:8080/api/info",
+            url: "http://localhost:8080/api/calc/info",
             datatype : 'json',
             type : "post",
             contentType : "application/json",
@@ -44,7 +44,7 @@ function przeslij_informacje(){
 function pobierz_dane(){
 
     $.ajax({
-        url: "http://localhost:8080/api/info",
+        url: "http://localhost:8080/api/calc/info",
         type : "get",
     }).then(function(data) {
         $("#nazwisko").val(data.nazwisko);
@@ -69,7 +69,7 @@ function przeslij_plik(){
     }
 
     $.ajax({
-        url: 'http://localhost:8080/api/plik',
+        url: 'http://localhost:8080/api/calc/file',
         type: "POST",
         data: new FormData(document.getElementById("plikForm")),
         enctype: 'multipart/form-data',
