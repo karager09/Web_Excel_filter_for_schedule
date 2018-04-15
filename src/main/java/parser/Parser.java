@@ -123,7 +123,10 @@ public class Parser {
         int start = data.getPodsumowanie_od()-1;
         for (String tmp:my_data) {
             if(tmp.equalsIgnoreCase("przedmioty")){
-
+                JSONObject j = new JSONObject();
+                j.put("name1",1);
+                j.put("name2",2).put("name3",3);
+                json.put("przedmioty",j);
             } else{
                 while(!tmp.equalsIgnoreCase(dataFormatter.formatCellValue(sheet.getRow(start).getCell(0)))){
                     System.out.println(tmp + " xD");

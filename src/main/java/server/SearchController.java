@@ -102,5 +102,15 @@ public class SearchController {
         return prepareData(findLecturerColumn(lastName,firstName),data).toString();
     }
 
+//    @GetMapping("/api/lecturer/{lastName}")
+//    public String getLecruterData(@PathVariable String lastName) throws IOException, InvalidFormatException {
+//        return prepareData(findLecturerColumn(lastName),findData()).toString();
+//    }
+//
+//    @GetMapping("/api/lecturer/{lastName}/{firstName}")
+//    public String getLecruterData(@PathVariable String lastName, @PathVariable String firstName) throws IOException, InvalidFormatException {
+//        return prepareData(findLecturerColumn(lastName,firstName),findData()).toString();
+//    }
+
 
 }
