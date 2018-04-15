@@ -14,28 +14,34 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<body onload="dodaj_jakie_info();">
+<body onload="add_information()">
 
 <div class="container">
 
     <div class="navbar navbar-expand-sm bg-light">
-        <a href="index">Wróć</a>
+        <a href="info">Wróć</a>
 
     </div>
 
 
-    <div class="page-header" align="center"><h2>Wybierz interesujące Cię informacje</h2></div>
+    <div class="page-header" align="center"><h2>Informacje</h2></div>
 
     <div class="form-group" align="center" style="margin:auto;">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4" id="main">
+        <div class="col-12 col-sm-8 col-md-8 col-lg-6" id="main">
             <br>
-            <div id="jakie_info" class="form-check row">
+                <table class="table table-striped" id="data">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Last</th>
+                    </tr>
+                    </thead>
+                    <tbody id="data_body">
 
-            </div>
+                    </tbody>
+                </table>
             <br>
 
-
-            <button id="send" class="btn btn-primary" type="button" onclick="send_request_lecturer();">Potwierdź</button>
         </div>
     </div>
 

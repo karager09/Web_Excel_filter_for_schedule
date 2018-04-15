@@ -72,7 +72,8 @@ function nieMaTakiegoUzytkownika(){
 function dodaj_info(id){
     //var id = "cos";
     //id = localStorage.getItem("nazwisko");
-    $('#jakie_info').append('<div><input type="checkbox" class="filled-in form-check-input" id='+id+' checked="checked"> <label class="form-check-label" for='+id+'>'+id+'</label> </div><br>');
+    var identity = id.replace(/\"/g,' ').replace(/ /g,'_');
+    $('#jakie_info').append('<div><input type="checkbox" class="check_class filled-in form-check-input" id=\"'+identity+'\" checked="checked"> <label class="form-check-label" for='+id+'>'+id+'</label> </div><br>');
 
 }
 
@@ -91,12 +92,60 @@ function dodaj_jakie_info(){
 }
 
 
-function przeslij_jakie_info(){
+function send_request_lecturer(){
+
+    var tab = new Array();
+
+    $(".check_class").each(function () {
+        if(this.checked)
+        tab.push(this.id.replace(/_/g," "));
+
+    });
+
+    //alert(tab);
+    localStorage.setItem("data", JSON.stringify(tab));
+
+    window.location.href = "/data";
+}
 
 
+function add_row(first,second){
+    $('#data_body').append('<tr><td>'+first+'</td> <td>'+second+'</td> </tr>');
 
+}
 
+function add_information(){
+    var nazwisko = localStorage.getItem("nazwisko");
+    var imie = localStorage.getItem("imie");
 
+    var info = localStorage.getItem("data");
+
+    var where_to_send = nazwisko;
+    if(imie !== null) where_to_send+=where_to_send+"/"+imie;
+    $.ajax({
+        url: "http://localhost:8080/api/lecturer/"+nazwisko,
+        datatype : 'json',
+        type : "post",
+        contentType : "application/json",
+        data : info
+    }).done(function(data) {
+
+        var parsed = JSON.parse(data);
+        var keys = Object.keys(parsed);
+
+        for(var i in keys){
+            add_row(keys[i],parsed[keys[i]]);
+        }
+        //alert(keys[0] + ", "+keys[1]);
+        //alert(parsed.PENSUM);
+        //alert(parsed[keys[0]]);
+        //alert(data);
+
+    }).fail(function(jqXHR, textStatus) {
+        alert('BLAD!!');
+    });
 
 
 }
+
+

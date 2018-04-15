@@ -115,7 +115,7 @@ public class Parser {
         workbook.close();
         return 0;
     }
-    public static JSONObject prepareData(int colNumber, String[] my_data) throws IOException, InvalidFormatException {
+    public static JSONObject  prepareData(int colNumber, String[] my_data) throws IOException, InvalidFormatException {
         JSONObject json = new JSONObject();
         Workbook workbook = WorkbookFactory.create(new File(FILE_NAME));
         Sheet sheet = workbook.getSheetAt(0);
