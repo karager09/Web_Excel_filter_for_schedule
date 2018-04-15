@@ -109,8 +109,8 @@ function send_request_lecturer(){
 }
 
 
-function add_row(first,second){
-    $('#data_body').append('<tr><td>'+first+'</td> <td>'+second+'</td> </tr>');
+function add_row(where,first,second){
+    $(where).append('<tr><td>'+first+'</td> <td>'+second+'</td> </tr>');
 
 }
 
@@ -134,7 +134,19 @@ function add_information(){
         var keys = Object.keys(parsed);
 
         for(var i in keys){
-            add_row(keys[i],parsed[keys[i]]);
+            if(keys[i] !== "przedmioty")
+            add_row('#data_body', keys[i],parsed[keys[i]]);
+            else {
+                $("#subjects_div").innerText = "Przedmioty";
+                $("#thead_subjects").append('<tr>\n" +"<th scope=\"col\">Nazwa</th>\n" +"<th scope=\"col\">Ilość godzin</th>\n"+"</tr>');
+
+                przedmioty = parsed[keys[i]];
+                keys_przedmioty = Object.keys(przedmioty);
+
+                for (var i in keys_przedmioty) {
+                    add_row("#subjects", keys_przedmioty[i], przedmioty[keys_przedmioty[i]]);
+                }
+            }
         }
         //alert(keys[0] + ", "+keys[1]);
         //alert(parsed.PENSUM);
