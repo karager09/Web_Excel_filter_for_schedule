@@ -14,7 +14,7 @@ function wyslij()
         //document.write("Dostalem odpowiedz: "+data);
         if(data === true) //document.write("Prowadzacy "+name+" istnieje!");
         {
-            localStorage.setItem("nazwisko", name);
+            localStorage.setItem("name", name);
             window.location.href = "/info";
 
         }
@@ -50,8 +50,8 @@ function wyslijZImieniem(){
     }).then(function(data, status, jqxhr) {
         if(data === true) //document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
         {
-            localStorage.setItem("nazwisko", name);
-            localStorage.setItem("imie", imie)
+            localStorage.setItem("name", name+"/"+imie);
+            //localStorage.setItem("imie", imie)
             window.location.href = "/info";
 
         }
@@ -115,14 +115,11 @@ function add_row(where,first,second){
 }
 
 function add_information(){
-    var nazwisko = localStorage.getItem("nazwisko");
-    var imie = localStorage.getItem("imie");
-
+    var name = localStorage.getItem("name");
     var info = localStorage.getItem("data");
-    var where_to_send = nazwisko;
-    if(imie !== null) where_to_send=nazwisko+"/"+imie;
+
     $.ajax({
-        url: "http://localhost:8080/api/lecturer/"+where_to_send,
+        url: "http://localhost:8080/api/lecturer/"+name,
         datatype : 'json',
         type : "post",
         contentType : "application/json",
@@ -136,7 +133,7 @@ function add_information(){
             if(keys[i] !== "przedmioty")
             add_row('#data_body', keys[i],parsed[keys[i]]);
             else {
-                $("#subjects_div").innerText = "Przedmioty";
+                $("#subjects_h").append("Przedmioty");
                 $("#thead_subjects").append('<tr>\n" +"<th scope=\"col\">Nazwa</th>\n" +"<th scope=\"col\">Ilość godzin</th>\n"+"</tr>');
 
                 przedmioty = parsed[keys[i]];
