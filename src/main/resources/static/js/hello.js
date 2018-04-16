@@ -119,11 +119,10 @@ function add_information(){
     var imie = localStorage.getItem("imie");
 
     var info = localStorage.getItem("data");
-
     var where_to_send = nazwisko;
-    if(imie !== null) where_to_send+=where_to_send+"/"+imie;
+    if(imie !== null) where_to_send=nazwisko+"/"+imie;
     $.ajax({
-        url: "http://localhost:8080/api/lecturer/"+nazwisko,
+        url: "http://localhost:8080/api/lecturer/"+where_to_send,
         datatype : 'json',
         type : "post",
         contentType : "application/json",

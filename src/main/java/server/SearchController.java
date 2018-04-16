@@ -94,11 +94,13 @@ public class SearchController {
 
     @PostMapping("/api/lecturer/{lastName}")
     public String getLecruterData(@PathVariable String lastName, @RequestBody String[] data) throws IOException, InvalidFormatException {
+        System.out.println(1+ "xD");
         return prepareData(findLecturerColumn(lastName),data).toString();
     }
 
     @PostMapping("/api/lecturer/{lastName}/{firstName}")
     public String getLecruterData(@PathVariable String lastName, @PathVariable String firstName, @RequestBody String[] data) throws IOException, InvalidFormatException {
+        System.out.println(firstName);
         return prepareData(findLecturerColumn(lastName,firstName),data).toString();
     }
 

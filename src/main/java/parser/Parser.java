@@ -76,7 +76,7 @@ public class Parser {
         }
         place[place.length-1] = "PRZEDMIOTY";
         workbook.close();
-        System.out.println(place.length);
+        //System.out.println(place.length);
         return place;
     }
 
@@ -89,13 +89,17 @@ public class Parser {
         for(Cell cell : row){
             String cellValue = new String(dataFormatter.formatCellValue(cell)).trim();
             //System.out.println(cellValue);
-            if(cellValue.equalsIgnoreCase(lastName)) return cell.getColumnIndex();
+            if((cellValue.trim()).equalsIgnoreCase(lastName)){
+                //System.out.println(lastName);
+                return cell.getColumnIndex();
+            }
         }
         workbook.close();
         return 0;
     }
 
     public static int findLecturerColumn(String lastName, String firstName) throws IOException, InvalidFormatException {
+        //System.out.println(lastName+" "+firstName);
         Workbook workbook = WorkbookFactory.create(new File(FILE_NAME));
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
@@ -123,13 +127,22 @@ public class Parser {
         int start = data.getPodsumowanie_od()-1;
         for (String tmp:my_data) {
             if(tmp.equalsIgnoreCase("przedmioty")){
-                JSONObject j = new JSONObject();
-                j.put("name1",1);
-                j.put("name2",2).put("name3",3);
-                json.put("przedmioty",j);
+                JSONObject subjects = new JSONObject();
+                Cell cell = null;
+                for(int i = data.getPrzedmioty(); i <= sheet.getLastRowNum(); i++){
+                    try{
+                        cell = sheet.getRow(i).getCell(colNumber);
+                        if(cell.getNumericCellValue() != 0){
+                            String subjectName = new String(dataFormatter.formatCellValue(sheet.getRow(i).getCell(0)) + " - " +dataFormatter.formatCellValue(sheet.getRow(i).getCell(8)));
+                            subjects.put(subjectName,cell.getNumericCellValue());
+                        }
+                    }catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                json.put("przedmioty", subjects);
             } else{
                 while(!tmp.equalsIgnoreCase(dataFormatter.formatCellValue(sheet.getRow(start).getCell(0)))){
-                    System.out.println(tmp + " xD");
                     start++;
                 }
 
@@ -145,7 +158,8 @@ public class Parser {
 //                            break;
 //                    }
 //                }else{
-
+                //System.out.println(colNumber);
+                //System.out.println();
                 json.put(tmp, cell.getNumericCellValue());
                 start = data.getPodsumowanie_od()-1;
                 //}
