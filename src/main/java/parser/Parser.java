@@ -4,7 +4,6 @@ package parser;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONObject;
-import org.springframework.boot.autoconfigure.data.mongo.ReactiveStreamsMongoClientDependsOnBeanFactoryPostProcessor;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.io.IOException;
 public class Parser {
 
     private static final String FILE_NAME = "src/main/resources/rozklad.xlsx";
-    private static Lecturer lecturer;
     private static PlaceOfData data = null;
 
     public static PlaceOfData getData() {
