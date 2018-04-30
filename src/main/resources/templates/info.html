@@ -14,7 +14,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<body onload="dodaj_jakie_info();">
+<body onload="dodaj_jakie_info(); get_all_alias();">
 
 <div class="container">
 
@@ -26,8 +26,11 @@
 
     <div class="page-header" align="center"><h2>Wybierz interesujące Cię informacje</h2></div>
 
-    <div class="form-group" align="center" style="margin:auto;">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4" id="main">
+    <!--<div class="form-group" align="center" style="margin:auto;">-->
+
+    <div class="container-fluid" align="center" style="margin:auto;">
+        <div class="row">
+        <div class="col-8 col-sm-8 col-md-8 col-lg-8" id="main">
             <br>
             <div id="jakie_info" class="form-check row">
 
@@ -39,9 +42,80 @@
             <br>
 
 
-            <button id="send" class="btn btn-primary" type="button" onclick="send_request_lecturer();">Potwierdź</button>
+        </div>
+
+
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+            <br>
+            <div class="form-group row">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <button id="change1" class="btn btn-info btn-xs" type="button" onclick="change_check(1);">Zmień 1</button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button id="save1" class="btn btn-xs" type="button" onclick="save_as(1);get_all_alias();">Zapisz</button>
+                    </div>
+
+                    <input type="text" class="form-control col-4" id="change_name_1" placeholder="Nazwa">
+                </div>
+            </div>
+            <br>
+
+
+
+                <div class="form-group row">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <button id="change2" class="btn btn-info btn-xs" type="button" onclick="change_check(2);">Zmień 2</button>
+                        </div>
+                        <div class="col-lg-4">
+                            <button id="save2" class="btn btn-xs" type="button" onclick="save_as(2);get_all_alias();">Zapisz</button>
+                        </div>
+
+                        <input type="text" class="form-control col-4" id="change_name_2" placeholder="Nazwa">
+                    </div>
+                </div>
+                <br>
+
+
+                    <div class="form-group row">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <button id="change3" class="btn btn-info btn-xs" type="button" onclick="change_check(3);">Zmień 3</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button id="save3" class="btn btn-xs" type="button" onclick="save_as(3);get_all_alias();">Zapisz</button>
+                            </div>
+
+                            <input type="text" class="form-control col-4" id="change_name_3" placeholder="Nazwa">
+                        </div>
+                    </div>
+                    <br>
+
+                        <div class="form-group row">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <button id="change4" class="btn btn-info btn-xs" type="button" onclick="change_check(4);">Zmień 4</button>
+                                </div>
+                                <div class="col-lg-4">
+                                    <button id="save4" class="btn btn-xs" type="button" onclick="save_as(4);get_all_alias();">Zapisz</button>
+                                </div>
+
+                                <input type="text" class="form-control col-4" id="change_name_4" placeholder="Nazwa">
+                            </div>
+                        </div>
+                        <br>
+
+
+            <br>
+
+
+            <button id="send" class="btn btn-primary btn-lg" type="button" onclick="send_request_lecturer();">Potwierdź</button>
+        </div>
         </div>
     </div>
+
+
 
 </div>
 </body>

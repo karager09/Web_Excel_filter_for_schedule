@@ -156,4 +156,89 @@ function add_information(){
 
 }
 
+function export_to_pdf(){
+    window.print();
+}
+
+
+function change_check(number){
+
+    $.ajax({
+        url: "http://localhost:8080/api/what_to_show/"+number,
+        type : "get"
+    }).then(function(data) {
+        //var example = ["pensum","zniżka pensum"];
+
+        for (var i in data) {
+            data[i] = data[i].replace(/\"/g, ' ').replace(/ /g, '_').toUpperCase();
+        }
+
+
+        $(".check_class").each(function () {
+            var flag = false;
+
+            for (var i in data) {
+                if (data[i] == this.id) flag = true;
+            }
+
+            if (flag == true) this.checked = true;
+            else this.checked = false;
+
+        });
+
+    });
+}
+
+function get_all_alias(){
+
+
+
+    for(var number=1; number<5; ++number){
+        get_alias(number);
+    }
+}
+
+function get_alias(number){
+    $.ajax({
+        url: "http://localhost:8080/api/what_to_show/name/"+number,
+        type : "get"
+    }).then(function(data) {
+        $("#change" + number).html(data);
+    });
+}
+
+function save_as(number){
+
+    if($("#change_name_"+number).val() != ""){
+
+        $.ajax({
+            url: "http://localhost:8080/api/what_to_show/name/" + number,
+            datatype : 'json',
+            type : "post",
+            contentType : "application/json",
+            data : $("#change_name_"+number).val()
+        });
+
+    }
+
+
+    var tab = new Array();
+    $(".check_class").each(function () {
+        if(this.checked)
+            tab.push(this.id.replace(/_/g," "));
+
+    });
+
+
+    $.ajax({
+        url: "http://localhost:8080/api/what_to_show/" + number,
+        datatype : 'json',
+        type : "post",
+        contentType : "application/json",
+        data : JSON.stringify(tab)
+    });
+
+
+
+}
 

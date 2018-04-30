@@ -83,6 +83,39 @@ public class SearchController {
     }
 
 
+    //TUTAJ PRZESYLASZ TE KTORE MAJA BYC ZAZNACZONE JAKO TRUE W CHECKBOXACH (TABLICA STRINGOW), RESZTA BEDZIE JAKO FALSE, {NUMBER} TO NUMER DLA KILKU OPCJI
+    @GetMapping("/api/what_to_show/{number}")
+    public String[] pobierz_info_o_xml_number(@PathVariable int number) throws IOException, InvalidFormatException {
+
+
+        return new String[]{"pensum", "zniżka pensum"};
+
+    }
+
+    //TUTAJ PRZESYLAM INFO JAKIE TRZEBA ZAPISAC POD KONKRETNYM NUMEREM I POTEM JE ZWRACAC W GET
+    @PostMapping("/api/what_to_show/{number}")
+    public void zapisz_info_o_xml_number(@PathVariable int number,@RequestBody  String [] data) throws IOException, InvalidFormatException {
+
+
+        //for(String s : data) System.out.println(s);
+
+    }
+
+
+    @PostMapping("/api/what_to_show/name/{number}")
+    public void zapisz_info_o_xml_name(@PathVariable int number,@RequestBody  String data) throws IOException, InvalidFormatException {
+
+        System.out.println(data);
+    }
+
+
+    @GetMapping("/api/what_to_show/name/{number}")
+    public String pobierz_info_o_xml_name(@PathVariable int number) throws IOException, InvalidFormatException {
+
+        return "Nazwa jakas";
+    }
+
+
 
     @PostMapping("/api/calc/info")
     public boolean zapisz_info(@RequestBody PlaceOfData placeOfData) throws IOException{
@@ -94,7 +127,7 @@ public class SearchController {
 
     @PostMapping("/api/lecturer/{lastName}")
     public String getLecruterData(@PathVariable String lastName, @RequestBody String[] data) throws IOException, InvalidFormatException {
-        System.out.println(1+ "xD");
+        //System.out.println(1+ "xD");
         return prepareData(findLecturerColumn(lastName),data).toString();
     }
 

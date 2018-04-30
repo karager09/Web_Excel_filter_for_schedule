@@ -14,13 +14,27 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<body onload="add_information()">
+<body id="body" onload="add_information()">
 
 <div class="container">
 
     <div class="navbar navbar-expand-sm bg-light">
-        <a href="info">Wróć</a>
+        <!--<a href="info">Wróć</a>-->
 
+
+
+
+
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <a href="info">Wróć</a>
+        </div>
+
+        <div class="mx-auto order-0">
+        </div>
+
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <button id="cmd" class="navbar-nav ml-auto btn btn-primary " type="button" onclick="export_to_pdf();">Zapisz jako PDF</button>
+        </div>
     </div>
 
 
@@ -54,6 +68,8 @@
                 </tbody>
             </table>
             <br>
+
+
 
         </div>
     </div>
