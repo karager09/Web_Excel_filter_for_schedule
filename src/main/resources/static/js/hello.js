@@ -210,33 +210,37 @@ function get_alias(number){
 function save_as(number){
 
     if($("#change_name_"+number).val() != ""){
+        var tab = new Array();
+        $(".check_class").each(function () {
+            if(this.checked)
+                tab.push(this.id.replace(/_/g," "));
+
+        });
 
         $.ajax({
-            url: "http://localhost:8080/api/what_to_show/name/" + number,
+            url: "http://localhost:8080/api/what_to_show/" + number + "/name/" + $("#change_name_"+number).val(),
             datatype : 'json',
             type : "post",
             contentType : "application/json",
-            data : $("#change_name_"+number).val()
+            data : JSON.stringify(tab)
+            // data : $("#change_name_"+number).val()
+        }).then(function() {
+            $("#change" + number).html($("#change_name_"+number).val());
         });
 
     }
 
 
-    var tab = new Array();
-    $(".check_class").each(function () {
-        if(this.checked)
-            tab.push(this.id.replace(/_/g," "));
-
-    });
 
 
-    $.ajax({
-        url: "http://localhost:8080/api/what_to_show/" + number,
-        datatype : 'json',
-        type : "post",
-        contentType : "application/json",
-        data : JSON.stringify(tab)
-    });
+
+    // $.ajax({
+    //     url: "http://localhost:8080/api/what_to_show/" + number,
+    //     datatype : 'json',
+    //     type : "post",
+    //     contentType : "application/json",
+    //     data : JSON.stringify(tab)
+    // });
 
 
 

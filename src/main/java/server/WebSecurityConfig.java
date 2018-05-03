@@ -20,11 +20,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USERNAME = "admin";
     private static String PASSWORD = "$2a$10$LRD9QZ//sr83feWeFbRhWu4i7TCiQU721ovhopIvGRJ.egUOeG1ne";
     private static final String ROLE = "ADMIN";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/index", "/js/hello.js", "/api/**", "/js/admin.js","/info","/data").permitAll()
+                .antMatchers("/panel").authenticated()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
