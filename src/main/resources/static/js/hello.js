@@ -164,7 +164,7 @@ function export_to_pdf(){
 function change_check(number){
 
     $.ajax({
-        url: "http://localhost:8080/api/what_to_show/"+number,
+        url: "http://localhost:8080/api/profile/"+number,
         type : "get"
     }).then(function(data) {
         //var example = ["pensum","zniżka pensum"];
@@ -200,7 +200,7 @@ function get_all_alias(){
 
 function get_alias(number){
     $.ajax({
-        url: "http://localhost:8080/api/what_to_show/name/"+number,
+        url: "http://localhost:8080/api/profile/name/"+number,
         type : "get"
     }).then(function(data) {
         $("#change" + number).html(data);
@@ -218,7 +218,7 @@ function save_as(number){
         });
 
         $.ajax({
-            url: "http://localhost:8080/api/what_to_show/" + number + "/name/" + $("#change_name_"+number).val(),
+            url: "http://localhost:8080/api/profile/" + number + "/name/" + $("#change_name_"+number).val(),
             datatype : 'json',
             type : "post",
             contentType : "application/json",
@@ -263,7 +263,10 @@ function wyslij_nowe_haslo(){
             data: $("#haslo").val()
         }).then(function (data, status, jqxhr) {
 
-            if(data === true) alert("Hasło zostało zmienione.");
+            if(data === true) {
+                alert("Hasło zostało zmienione.");
+                window.location.href = "/";
+            }
             else alert("Nie udało się zmienić hasła");
         });
 
