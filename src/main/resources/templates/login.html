@@ -8,12 +8,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--<script type="text/javascript" src="js/admin.js"></script>-->
-    <script>
-        function przypomnij_haslo(){
-            alert("Nowe hasło zostanie wysłane");
-        }
-    </script>
+    <script type="text/javascript" src="js/hello.js"></script>
+    <!--<script>-->
+        <!--function przypomnij_haslo(){-->
+            <!--alert("Nowe hasło zostanie wysłane");-->
+        <!--}-->
+    <!--</script>-->
 
 
 
@@ -41,7 +41,7 @@
             <div th:if="${param.error}">
                 Podałeś nieprawidłowe dane!
                 <br>
-                <button class="btn btn-danger" type="button" onclick="przypomnij_haslo();">Zresetuj hasło</button>
+                <button class="btn btn-danger" type="button" onclick="zresetuj_haslo();">Zresetuj hasło</button>
             </div>
             <form th:action="@{/login}" method="post">
                 <label> Login: <input type="text" class="form-control" name="username"/> </label>

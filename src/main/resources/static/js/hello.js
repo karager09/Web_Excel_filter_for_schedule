@@ -226,6 +226,7 @@ function save_as(number){
             // data : $("#change_name_"+number).val()
         }).then(function() {
             $("#change" + number).html($("#change_name_"+number).val());
+            $("#change_name_"+number).val('');
         });
 
     }
@@ -246,3 +247,37 @@ function save_as(number){
 
 }
 
+
+function wyslij_nowe_haslo(){
+
+    if($("#haslo").val() == $("#haslo2").val()) {
+
+        var no = window.location.search.split('?')[1];
+        //alert(no +", "+$("#haslo").val());
+
+        $.ajax({
+            url: "http://localhost:8080/api/reset/" + no,
+            datatype: 'json',
+            type: "post",
+            contentType: "application/json",
+            data: $("#haslo").val()
+        }).then(function (data, status, jqxhr) {
+
+            if(data === true) alert("Hasło zostało zmienione.");
+            else alert("Nie udało się zmienić hasła");
+        });
+
+
+    }else {alert("Podane hasła różnią się od siebie.");}
+}
+
+function zresetuj_haslo(){
+    $.ajax({
+        url: "http://localhost:8080/api/reset",
+        type : "get"
+    }).then(function(data) {
+        if(data === true ) alert("Link aktywacyjny został wysłany na email");
+        else alert("Coś poszło nie tak!");
+    });
+
+}

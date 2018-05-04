@@ -144,6 +144,21 @@ public class SearchController {
         return prepareData(findLecturerColumn(lastName,firstName),data).toString();
     }
 
+    //TUTAJ USTAW NOWE HASLO
+    @PostMapping("/api/reset/{number}")
+    public boolean setNewPassword(@PathVariable int number,  @RequestBody String password) throws IOException, InvalidFormatException {
+
+        System.out.println(number +", " + password);
+        return true;
+    }
+
+
+    @GetMapping("/api/reset")
+    public boolean sendEmailWithActivationNumber() throws IOException, InvalidFormatException {
+
+        return true;
+    }
+
 
 
 }
