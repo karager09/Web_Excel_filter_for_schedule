@@ -126,7 +126,8 @@ public class Parser {
                     try{
                         cell = sheet.getRow(i).getCell(colNumber);
                         if(cell.getNumericCellValue() != 0){
-                            String subjectName = dataFormatter.formatCellValue(sheet.getRow(i).getCell(0)) + " - " + dataFormatter.formatCellValue(sheet.getRow(i).getCell(8));
+                            String subjectName = dataFormatter.formatCellValue(sheet.getRow(i).getCell(0)) + " - " + dataFormatter.formatCellValue(sheet.getRow(i).getCell(8))
+                                    + " - " + dataFormatter.formatCellValue(sheet.getRow(i).getCell(3)) + "/" + dataFormatter.formatCellValue(sheet.getRow(i).getCell(4));
                             subjects.put(subjectName,cell.getNumericCellValue());
                         }
                     }catch(NullPointerException e){

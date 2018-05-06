@@ -134,7 +134,7 @@ function add_information(){
             add_row('#data_body', keys[i],parsed[keys[i]]);
             else {
                 $("#subjects_h").append("Przedmioty");
-                $("#thead_subjects").append('<tr>\n" +"<th scope=\"col\">Nazwa</th>\n" +"<th scope=\"col\">Ilość godzin</th>\n"+"</tr>');
+                $("#thead_subjects").append('<tr>\n" +"<th scope=\"col\">Nazwa - Rodzaj - Stopień/Semestr</th>\n" +"<th scope=\"col\">Ilość godzin</th>\n"+"</tr>');
 
                 przedmioty = parsed[keys[i]];
                 keys_przedmioty = Object.keys(przedmioty);
