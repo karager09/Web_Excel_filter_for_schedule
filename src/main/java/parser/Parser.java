@@ -141,11 +141,26 @@ public class Parser {
                 }
 
                 Cell cell = sheet.getRow(start).getCell(colNumber);
-                json.put(tmp, cell.getNumericCellValue());
+                if(tmp.contains("%")){
+                    System.out.println(tmp);
+                    json.put(tmp, round(cell.getNumericCellValue()*100,2));
+                }else{
+                    json.put(tmp, cell.getNumericCellValue());
+                }
+               // json.put(tmp, cell.getNumericCellValue());
                 start = dataPlace.getPrzedmioty_od()-1;
             }
         }
         workbook.close();
         return json;
+    }
+
+    private static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }
