@@ -142,8 +142,9 @@ public class Parser {
 
                 Cell cell = sheet.getRow(start).getCell(colNumber);
                 if(tmp.contains("%")){
-                    System.out.println(tmp);
-                    json.put(tmp, round(cell.getNumericCellValue()*100,2));
+                    //System.out.println(tmp);
+                    json.put(tmp, round(cell.getNumericCellValue(),5));//zmienilem z powrotem
+                    //json.put(tmp, round(cell.getNumericCellValue()*100,2));
                 }else{
                     json.put(tmp, cell.getNumericCellValue());
                 }

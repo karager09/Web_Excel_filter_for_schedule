@@ -78,11 +78,11 @@ public class ParserTest {
 
 
     public JSONObject getAllLecturerData(int column){
-        String [] my_data = {"PRZEDMIOTY", "PENSUM", "ZNIŻKA PENSUM", "GODZINY RAZEM (OBCIĄŻENIE DYDAKTYCZNE)", "GODZINY PONADWYMIAROWE %", "ZAJĘCIA DYDAKTYCZNE RAZEM", "WYKŁADY STACJONARNE", "ZAJĘCIA STACJONARNE", "WYKŁADY NIESTACJONARNE", "ZAJĘCIA NIESTACJONARNE", "SUMA GODZIN DODATKOWYCH", "GODZINY ZA EGZAMIN", "GODZINY ZA ZAJĘCIA W J. ANGIELSKIM", "OPIEKA NAD DOKTORANTAMI", "OPIEKA NAD KOŁAMI NAUKOWYMI", "OPIEKA NAD STUDENTAMI (ERASMUS)", "URLOPY NAUKOWE, NIEOBECNOŚCI"};
+        String [] my_data = {"PRZEDMIOTY", "PENSUM", "ZNIŻKA PENSUM", "GODZINY RAZEM (OBCIĄŻENIE DYDAKTYCZNE)", "GODZINY PONADWYMIAROWE %", "ZAJĘCIA DYDAKTYCZNE RAZEM", "WYKŁADY STACJONARNE", "ZAJĘCIA STACJONARNE", "WYKŁADY NIESTACJONARNE", "ZAJĘCIA NIESTACJONARNE", "SUMA GODZIN DODATKOWYCH", "GODZINY ZA EGZAMIN", "GODZINY ZA ZAJĘCIA W J. ANGIELSKIM", "OPIEKA NAD DOKTORANTAMI", "OPIEKA NAD KOŁAMI NAUKOWYMI", "OPIEKA NAD STUDENTAMI (ERASMUS)", "URLOPY NAUKOWE, NIEOBECNOŚCI","NADGODZINY"};
         JSONObject json = null;
         try {
              json = Parser.prepareData(column, my_data);
-            System.out.println(json);
+            //System.out.println(json);
 //            JSONObject json_przedmioty = (JSONObject)json.get("przedmioty");
 //            double i = (double)json_przedmioty.get("Hurtownie danych - L");
 //            System.out.println(i);
@@ -105,7 +105,8 @@ public class ParserTest {
                     sum += json_przedmioty.getDouble(keys_przedmioty);
                 }
              }else{
-                 sum += keys.equals("GODZINY PONADWYMIAROWE %")? 0:json.getDouble(keys);
+                 //sum += keys.equals("GODZINY PONADWYMIAROWE %")? 0:json.getDouble(keys);
+                 sum += json.getDouble(keys);
              }
          }
         return sum;
@@ -113,11 +114,13 @@ public class ParserTest {
 
     @Test
     public void checkSumColumn(){
-        System.out.println(sumColumn(14)); // pierwszy w excelu, szmuc
-        System.out.println(sumColumn(15));
-        System.out.println(sumColumn(16));
-        System.out.println(sumColumn(17));
-        System.out.println(sumColumn(18)); // ligeza - też źle
-        System.out.println(sumColumn(19));
+        Assert.assertEquals(1025.05555,sumColumn(14),0.0001);//szmuc
+        Assert.assertEquals(1274,sumColumn(15),0.0001);
+        Assert.assertEquals(823,sumColumn(16),0.0001);
+        Assert.assertEquals(1381.066666,sumColumn(17),0.001);
+        Assert.assertEquals(1114,sumColumn(19),0.001);//nalepa
+        Assert.assertEquals(1505.254166,sumColumn(27+14),0.0001); // szymkat
+        Assert.assertEquals(1650.375,sumColumn(28+14),0.001);
+
     }
 }
