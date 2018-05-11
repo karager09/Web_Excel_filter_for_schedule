@@ -172,5 +172,11 @@ public class SearchController {
     }
 
 
+    //tutaj trzeba zarejestrowac nowego uzytkownika, wyslac maila do mastera? do tego kogos?
+    @PostMapping("/api/register")
+    public boolean register(@RequestBody String email) {
+        System.out.println(email);
+        return true;
+    }
 
 }
