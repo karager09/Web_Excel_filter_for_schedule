@@ -1,4 +1,4 @@
-function wyslij()
+/*function wyslij()
 {
     var name = $("#nazwisko").val();
 
@@ -30,14 +30,17 @@ function potrzebaJeszczeImie(){
 
     $('#send').attr("onclick", "wyslijZImieniem()");
 }
+*/
+
 
 function wyslijZImieniem(){
 
     var name = $("#nazwisko").val();
     var imie = $("#imie").val();
+    var file = $("#wybierz_plik").val();
 
     $.ajax({
-        url: "http://localhost:8080/api/search/fullname",
+        url: "http://localhost:8080/api/"+file+"/search/fullname",
         datatype : 'json',
         type : "post",
         contentType : "application/json",
@@ -51,7 +54,7 @@ function wyslijZImieniem(){
         if(data === true) //document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
         {
             localStorage.setItem("name", name+"/"+imie);
-            //localStorage.setItem("imie", imie)
+            localStorage.setItem("file", file);
             window.location.href = "/info";
 
         }
@@ -80,7 +83,7 @@ function dodaj_info(id){
 function dodaj_jakie_info(){
 
     $.ajax({
-        url: "http://localhost:8080/api/what_to_show",
+        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/what_to_show",
         type : "get"
     }).then(function(data) {
         for(var i in data)
@@ -119,7 +122,7 @@ function add_information(){
     var info = localStorage.getItem("data");
 
     $.ajax({
-        url: "http://localhost:8080/api/lecturer/"+name,
+        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/lecturer/"+name,
         datatype : 'json',
         type : "post",
         contentType : "application/json",
@@ -164,7 +167,7 @@ function export_to_pdf(){
 function change_check(number){
 
     $.ajax({
-        url: "http://localhost:8080/api/profile/"+number,
+        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/profile/"+number,
         type : "get"
     }).then(function(data) {
         //var example = ["pensum","zniżka pensum"];
@@ -191,8 +194,6 @@ function change_check(number){
 
 function get_all_alias(){
 
-
-
     for(var number=1; number<5; ++number){
         get_alias(number);
     }
@@ -200,7 +201,7 @@ function get_all_alias(){
 
 function get_alias(number){
     $.ajax({
-        url: "http://localhost:8080/api/profile/name/"+number,
+        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/profile/name/"+number,
         type : "get"
     }).then(function(data) {
         $("#change" + number).html(data);
@@ -218,7 +219,7 @@ function save_as(number){
         });
 
         $.ajax({
-            url: "http://localhost:8080/api/profile/" + number + "/name/" + $("#change_name_"+number).val(),
+            url: "http://localhost:8080/api/"+localStorage.getItem("file")+"profile/" + number + "/name/" + $("#change_name_"+number).val(),
             datatype : 'json',
             type : "post",
             contentType : "application/json",
@@ -230,20 +231,6 @@ function save_as(number){
         });
 
     }
-
-
-
-
-
-    // $.ajax({
-    //     url: "http://localhost:8080/api/what_to_show/" + number,
-    //     datatype : 'json',
-    //     type : "post",
-    //     contentType : "application/json",
-    //     data : JSON.stringify(tab)
-    // });
-
-
 
 }
 
@@ -282,5 +269,32 @@ function zresetuj_haslo(){
         if(data === true ) alert("Link aktywacyjny został wysłany na email");
         else alert("Coś poszło nie tak!");
     });
+}
 
+
+function wstaw_nazwisko(){
+
+    var name = localStorage.getItem("name");
+
+    var imie = name.split("/")[1];
+    var nazwisko = name.split("/")[0];
+    imie = imie.toLowerCase().charAt(0).toUpperCase() + imie.toLowerCase().substr(1);
+    nazwisko = nazwisko.toLowerCase().charAt(0).toUpperCase() + nazwisko.toLowerCase().substr(1);
+
+
+    $('#nazwa_prowadzacego').append(imie +" "+ nazwisko);
+}
+
+
+function wstaw_pliki(){
+    $.ajax({
+        url: "http://localhost:8080/api/files",
+        type : "get"
+    }).then(function(data) {
+
+        for(var i in data)
+            if(i==0) $('#wybierz_plik').append('<option value="'+data[i]+'" selected>'+data[i]+'</option>');
+            else $('#wybierz_plik').append('<option value="'+data[i]+'">'+data[i]+'</option>');
+
+    });
 }

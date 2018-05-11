@@ -12,7 +12,7 @@ function przeslij_informacje(){
 
 
         $.ajax({
-            url: "http://localhost:8080/api/calc/info",
+            url: "http://localhost:8080/api/"+$( "#wybierz_plik option:selected" ).text()+"/calc/info",
             datatype : 'json',
             type : "post",
             contentType : "application/json",
@@ -41,10 +41,10 @@ function przeslij_informacje(){
     }
 }
 
-function pobierz_dane(){
+function pobierz_dane(fileName){
 
     $.ajax({
-        url: "http://localhost:8080/api/calc/info",
+        url: "http://localhost:8080/api/"+fileName+"/calc/info",
         type : "get",
     }).then(function(data) {
         $("#nazwisko").val(data.nazwisko);
@@ -106,4 +106,39 @@ function przeslij_plik(){
 
 function przypomnij_haslo(){
     alert("Nowe hasło zostanie wysłane");
+}
+
+
+function wstaw_pliki(){
+    $.ajax({
+        url: "http://localhost:8080/api/files",
+        type : "get"
+    }).then(function(data) {
+
+        for(var i in data) {
+            $('#pliki').append('<div class="form-group row"> <label for="' + data[i] + '" class="col-sm-6 col-form-label">' + data[i] + '</label> <div class="col-sm-3"> <button type="button" class="btn" id="' + data[i] + '" onclick="usun_plik(\'' + data[i] + '\');">Usuń</button> </div> </div>');
+
+            if (i == 0)
+            {
+                $('#wybierz_plik').append('<option value="' + data[i] + '" selected>' + data[i] + '</option>');
+                pobierz_dane(data[i]);
+            }
+            else $('#wybierz_plik').append('<option value="' + data[i] + '">' + data[i] + '</option>');
+        }
+    });
+}
+
+
+function usun_plik(fileName){
+    $.ajax({
+        url: "http://localhost:8080/api/files/"+fileName,
+        type : "delete"
+    }).then(function(data) {
+        location.reload();
+    });
+
+}
+
+function update_info(){
+    pobierz_dane($( "#wybierz_plik option:selected" ).text());
 }

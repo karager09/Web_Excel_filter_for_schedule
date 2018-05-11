@@ -14,7 +14,7 @@
     <link rel="Shortcut icon" href="images/icon.png" />
 
 
-<body>
+<body onload="wstaw_pliki();">
 
 
 <!--<div align="center">-->
@@ -38,9 +38,18 @@
             <label for="nazwisko">Podaj nazwisko:</label>
             <input type="text" class="form-control" id="nazwisko">
             <br>
-            <div id="imie_div"></div>
+            <div id="imie_div"><label for="imie">Podaj imię:</label><input type="text" class="form-control" id="imie"><br></div>
+            <br>
 
-            <button id="send" class="btn btn-primary" type="button" onclick="wyslij();">Potwierdź</button>
+            <div id="select_file">
+                <label class="my-1 mr-2" for="wybierz_plik">Wybierz plik:</label>
+                <select class="custom-select my-1 mr-sm-2" id="wybierz_plik">
+                <!--<option value="1">One</option>-->
+                <!--<option value="2" selected>Two</option>-->
+                <!--<option value="3">Three</option>-->
+            </select></div>
+
+            <button id="send" class="btn btn-primary" type="button" onclick="wyslijZImieniem();">Potwierdź</button>
         </div>
     </div>
 </div>

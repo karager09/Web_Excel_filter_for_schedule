@@ -31,19 +31,35 @@ public class SearchController {
 
     private static Thread resetThread;
 
-    @PostMapping(value = "/api/search/lastname")
-    public boolean searchLecturerByLastname(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
-        return Parser.findLecturer(lecturer.getLastName());
-    }
 
-    @PostMapping(value = "/api/search/fullname")
-    public boolean searchLecturerByFullname(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
+//    @PostMapping(value = "/api/search/lastname")
+//    public boolean searchLecturerByLastname(@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
+//        return Parser.findLecturer(lecturer.getLastName());
+//    }
+
+
+    //trzeba poprawic zeby wyszukiwalo w odpowiednim pliku
+    @PostMapping(value = "/api/{fileName}/search/fullname")
+    public boolean searchLecturerByFullname(@PathVariable String fileName,@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
 
         return Parser.findLecturer(lecturer.getLastName(), lecturer.getFirstName());
     }
 
 
+    //tutaj pobieram nazwy dostepnych plikow
+    //pierwszy pobrany jest domyslny
+    @GetMapping("/api/files")
+    public String[] getNameOfFiles() throws IOException {
 
+        return new String[]{"rozklad.xlsx","jakies_rozklad_2.xlsx","plik_3.xlsx"};
+    }
+
+    //usuwasz odpowiedni plik
+    @DeleteMapping("/api/files/{fileName}")
+    public boolean deleteFile(@PathVariable String fileName) throws IOException {
+
+        return true;
+    }
 
     @RequestMapping(value = "/api/calc/file", method = RequestMethod.POST, produces = {"application/json"})
     public @ResponseBody boolean echoFile(MultipartHttpServletRequest request/*,
@@ -64,34 +80,39 @@ public class SearchController {
     }
 
 //TUTAJ MUSISZ WSTAWIC DANE, KTÓRE SĄ ZAPISANE NA SERWERZE, TAK ZEBYM JE WSTAWIL DO FORMULARZA
-    @GetMapping("/api/calc/info")
-    public DataPlace getDataPlaceInfo() throws IOException {
+    //zmiana
+    @GetMapping("/api/{fileName}/calc/info")
+    public DataPlace getDataPlaceInfo(@PathVariable String fileName) throws IOException {
         return FilesController.readDataInfo();
     }
 
-    @PostMapping("/api/calc/info")
-    public boolean saveDataPlaceInfo(@RequestBody DataPlace dataPlace) {
+    //zmiana
+    @PostMapping("/api/{fileName}/calc/info")
+    public boolean saveDataPlaceInfo(@PathVariable String fileName, @RequestBody DataPlace dataPlace) {
         FilesController.saveDataInfo(dataPlace);
         return true;
     }
 
 
     //INFO O TYM CO JEST DO WYBORU PRZY POKAZYWANIU
-    @GetMapping("/api/what_to_show")
-    public String[] getDataInfo() throws IOException, InvalidFormatException {
+    //trzeba zmienic na konkretny plik
+    @GetMapping("/api/{fileName}/what_to_show")
+    public String[] getDataInfo(@PathVariable String fileName) throws IOException, InvalidFormatException {
         return findData();
     }
 
 
     //TUTAJ PRZESYLASZ TE KTORE MAJA BYC ZAZNACZONE JAKO TRUE W CHECKBOXACH (TABLICA STRINGOW), RESZTA BEDZIE JAKO FALSE, {NUMBER} TO NUMER DLA KILKU OPCJI
-    @GetMapping("/api/profile/{number}")
-    public String[] getProfile(@PathVariable int number) throws IOException {
+    //trzeba zmienic na konkretny plik
+    @GetMapping("/api/{fileName}/profile/{number}")
+    public String[] getProfile(@PathVariable String fileName, @PathVariable int number) throws IOException {
             return FilesController.getProfileBody(number);
     }
 
     //TUTAJ PRZESYLAM INFO JAKIE TRZEBA ZAPISAC POD KONKRETNYM NUMEREM I POTEM JE ZWRACAC W GET
-    @PostMapping("/api/profile/{number}/name/{name}")
-    public void saveProfile(@PathVariable String name, @PathVariable int number,@RequestBody  String [] data){
+    //zmiana na konkretny plik
+    @PostMapping("/api/{fileName}/profile/{number}/name/{name}")
+    public void saveProfile(@PathVariable String fileName,@PathVariable String name, @PathVariable int number,@RequestBody  String [] data){
 
         List<String> newData = new ArrayList<>(Arrays.asList(data));
         newData.add(0, name);
@@ -102,9 +123,9 @@ public class SearchController {
 
 
 
-
-    @GetMapping("/api/profile/name/{number}")
-    public String getProfileName(@PathVariable int number) throws IOException {
+    //zmiana na konkretny plik
+    @GetMapping("/api/{fileName}/profile/name/{number}")
+    public String getProfileName(@PathVariable String fileName,@PathVariable int number) throws IOException {
         return FilesController.getProfileName(number);
     }
 
@@ -112,13 +133,14 @@ public class SearchController {
 
 
 
-    @PostMapping("/api/lecturer/{lastName}")
-    public String getLecturerData(@PathVariable String lastName, @RequestBody String[] data) throws IOException, InvalidFormatException {
-        return prepareData(findLecturerColumn(lastName),data).toString();
-    }
+//    @PostMapping("/api/lecturer/{lastName}")
+//    public String getLecturerData(@PathVariable String lastName, @RequestBody String[] data) throws IOException, InvalidFormatException {
+//        return prepareData(findLecturerColumn(lastName),data).toString();
+//    }
 
-    @PostMapping("/api/lecturer/{lastName}/{firstName}")
-    public String getLecturerData(@PathVariable String lastName, @PathVariable String firstName, @RequestBody String[] data) throws IOException, InvalidFormatException {
+    //zmiana na konkretny plik
+    @PostMapping("/api/{fileName}/lecturer/{lastName}/{firstName}")
+    public String getLecturerData(@PathVariable String fileName,@PathVariable String lastName, @PathVariable String firstName, @RequestBody String[] data) throws IOException, InvalidFormatException {
 
         return prepareData(findLecturerColumn(lastName,firstName),data).toString();
     }
