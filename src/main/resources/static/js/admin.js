@@ -72,7 +72,7 @@ function przeslij_plik(){
         url: 'http://localhost:8080/api/calc/file',
         type: "POST",
         data: new FormData(document.getElementById("plikForm")),
-        enctype: 'multipart/form-data',
+        enctype: 'multipart/form-aktualny',
         processData: false,
         contentType: false
     }).done(function(data) {

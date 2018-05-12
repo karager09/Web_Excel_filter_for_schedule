@@ -9,8 +9,8 @@ function send(){
             contentType: "application/json",
             data: email
         }).then(function (data, status, jqxhr) {
-
-            alert('Żądanie zostało wysłane. Czekaj na potwierdzającego e-maila.');
+            if(data == true) alert('Żądanie zostało wysłane. Czekaj na potwierdzającego e-maila.');
+            else alert('Istnieje już konto o tym adresie email');
         });
     }
     else

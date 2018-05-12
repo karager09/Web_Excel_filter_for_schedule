@@ -45,20 +45,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        UserDetails user =
 //                null;
 //        try {
-//            user = User.withUsername(USERNAME)
+//            user = User.withUsername("admin")
 //                    .password(FilesController.getPassword())
-//                    .roles(ROLE)
+//                    .roles("ADMIN")
 //                    .build();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 //        return new InMemoryUserDetailsManager(user);
 //    }
-
-
+//
+//
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+//        auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 //    }
 
 

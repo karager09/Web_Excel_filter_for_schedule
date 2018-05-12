@@ -45,11 +45,11 @@
                 <button class="btn btn-danger" type="button" onclick="zresetuj_haslo();">Zresetuj hasło</button>
             </div>
             <form th:action="@{/login}" method="post">
-                <label> Login: <input type="text" class="form-control" name="username"/> </label>
+                <label> Login: <input type="text" id="email" class="form-control" name="username"/> </label>
                 <br>
                 <label> Hasło: <input type="password" class="form-control" name="password"/> </label>
                 <br>
-                <input type="submit" class="btn btn-primary" value="Zaloguj"/>
+                <input type="submit" class="btn btn-primary" onclick="zapisz_nazwe();" value="Zaloguj"/>
             </form>
             <div id="przypomnienie" style='margin-top:10px'></div>
         </div>

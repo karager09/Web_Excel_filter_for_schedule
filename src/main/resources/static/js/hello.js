@@ -7,12 +7,12 @@
         datatype : 'json',
         type : "post",
         contentType : "application/json",
-        data : JSON.stringify({
+        aktualny : JSON.stringify({
             lastName: name
         })
-    }).then(function(data, status, jqxhr) {
-        //document.write("Dostalem odpowiedz: "+data);
-        if(data === true) //document.write("Prowadzacy "+name+" istnieje!");
+    }).then(function(aktualny, status, jqxhr) {
+        //document.write("Dostalem odpowiedz: "+aktualny);
+        if(aktualny === true) //document.write("Prowadzacy "+name+" istnieje!");
         {
             localStorage.setItem("name", name);
             window.location.href = "/info";
@@ -108,7 +108,7 @@ function send_request_lecturer(){
     //alert(tab);
     localStorage.setItem("data", JSON.stringify(tab));
 
-    window.location.href = "/data";
+    window.location.href = "/aktualny";
 }
 
 
@@ -150,7 +150,7 @@ function add_information(){
         //alert(keys[0] + ", "+keys[1]);
         //alert(parsed.PENSUM);
         //alert(parsed[keys[0]]);
-        //alert(data);
+        //alert(aktualny);
 
     }).fail(function(jqXHR, textStatus) {
         alert('BLAD!!');
@@ -224,7 +224,7 @@ function save_as(number){
             type : "post",
             contentType : "application/json",
             data : JSON.stringify(tab)
-            // data : $("#change_name_"+number).val()
+            // aktualny : $("#change_name_"+number).val()
         }).then(function() {
             $("#change" + number).html($("#change_name_"+number).val());
             $("#change_name_"+number).val('');
@@ -262,8 +262,10 @@ function wyslij_nowe_haslo(){
 }
 
 function zresetuj_haslo(){
+
+    var email = localStorage.getItem("email");
     $.ajax({
-        url: "http://localhost:8080/api/reset",
+        url: "http://localhost:8080/api/reset/" + email,
         type : "get"
     }).then(function(data) {
         if(data === true ) alert("Link aktywacyjny został wysłany na email");
@@ -297,4 +299,9 @@ function wstaw_pliki(){
             else $('#wybierz_plik').append('<option value="'+data[i]+'">'+data[i]+'</option>');
 
     });
+}
+
+function zapisz_nazwe(){
+    var email = $("#email").val();
+    localStorage.setItem("email", email);
 }

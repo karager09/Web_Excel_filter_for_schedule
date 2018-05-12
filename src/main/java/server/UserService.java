@@ -12,7 +12,6 @@ import java.io.IOException;
 public class UserService implements UserDetailsService {
 
 
-    private static final String USERNAME = "admin";
     private static final String ROLE = "ADMIN";
 
     @Override
@@ -20,10 +19,19 @@ public class UserService implements UserDetailsService {
         UserDetails user =
                 null;
         try {
-            user = User.withUsername(USERNAME)
-                    .password(FilesController.getPassword())
-                    .roles(ROLE)
-                    .build();
+//            if(username.equals(MASTER)){
+//                user = User.withUsername(MASTER)
+//                        .password(FilesController.getMasterPassword())
+//                        .roles(ROLE)
+//                        .build();
+            /*}else*/
+            if(FilesController.checkUserName(username)){
+                user = User.withUsername(username)
+                        .password(FilesController.getPassword(username))
+                        .roles(ROLE)
+                        .build();
+            }
+            else throw new UsernameNotFoundException("Wrong username!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,7 +39,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void updatePassword(String password) {
-        FilesController.setPassword(password);
+    public void updatePassword(String userName, String password) {
+        FilesController.setPassword(userName, password);
     }
 }

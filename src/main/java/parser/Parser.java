@@ -13,9 +13,9 @@ import java.util.List;
 public class Parser {
 
 
-    public static boolean findLecturer(String lastName) throws IOException, InvalidFormatException{
-        DataPlace dataPlace = FilesController.readDataInfo();
-        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule());
+    public static boolean findLecturer(String fileName, String lastName) throws IOException, InvalidFormatException{
+        DataPlace dataPlace = FilesController.readDataInfo(fileName);
+        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule(fileName));
         int counter = 0;
         Sheet sheet;
         sheet = workbook.getSheetAt(0);
@@ -31,9 +31,9 @@ public class Parser {
 //        else return false;
     }
 
-    public static boolean findLecturer(String lastName, String firstName) throws IOException, InvalidFormatException {
-        DataPlace dataPlace = FilesController.readDataInfo();
-        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule());
+    public static boolean findLecturer(String fileName, String lastName, String firstName) throws IOException, InvalidFormatException {
+        DataPlace dataPlace = FilesController.readDataInfo(fileName);
+        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule(fileName));
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
         Row lastNameRow = sheet.getRow(dataPlace.getNazwisko()-1);
@@ -54,11 +54,11 @@ public class Parser {
     }
 
 
-    public static String[] findData() throws IOException, InvalidFormatException{
+    public static String[] findData(String fileName) throws IOException, InvalidFormatException{
         List<String> place = new ArrayList<>();
 
-        DataPlace dataPlace = FilesController.readDataInfo();
-        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule());
+        DataPlace dataPlace = FilesController.readDataInfo(fileName);
+        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule(fileName));
         int start = dataPlace.getPodsumowanie_od()-1;
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
@@ -72,9 +72,9 @@ public class Parser {
     }
 
 
-    public static int findLecturerColumn(String lastName) throws IOException, InvalidFormatException {
-        DataPlace dataPlace = FilesController.readDataInfo();
-        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule());
+    public static int findLecturerColumn(String fileName, String lastName) throws IOException, InvalidFormatException {
+        DataPlace dataPlace = FilesController.readDataInfo(fileName);
+        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule(fileName));
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
         Row row =  sheet.getRow(dataPlace.getNazwisko()-1);
@@ -89,10 +89,10 @@ public class Parser {
         return 0;
     }
 
-    public static int findLecturerColumn(String lastName, String firstName) throws IOException, InvalidFormatException {
+    public static int findLecturerColumn(String fileName, String lastName, String firstName) throws IOException, InvalidFormatException {
 
-        DataPlace dataPlace = FilesController.readDataInfo();
-        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule());
+        DataPlace dataPlace = FilesController.readDataInfo(fileName);
+        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule(fileName));
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
         Row lastNameRow = sheet.getRow(dataPlace.getNazwisko()-1);
@@ -111,10 +111,10 @@ public class Parser {
         workbook.close();
         return 0;
     }
-    public static JSONObject  prepareData(int colNumber, String[] my_data) throws IOException, InvalidFormatException {
+    public static JSONObject  prepareData(String fleName, int colNumber, String[] my_data) throws IOException, InvalidFormatException {
         JSONObject json = new JSONObject();
-        DataPlace dataPlace = FilesController.readDataInfo();
-        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule());
+        DataPlace dataPlace = FilesController.readDataInfo(fleName);
+        Workbook workbook = WorkbookFactory.create(FilesController.getSchedule(fleName));
         Sheet sheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
         int start = dataPlace.getPodsumowanie_od()-1;

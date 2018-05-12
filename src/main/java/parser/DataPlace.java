@@ -26,22 +26,22 @@ public class DataPlace {
     }
 
 
-//    public static void saveAsFile(DataPlace data) throws IOException {
-//        File file = new File("src\\main\\resources\\data.txt");
+//    public static void saveAsFile(DataPlace aktualny) throws IOException {
+//        File file = new File("src\\main\\resources\\aktualny.txt");
 //        PrintWriter printWriter = new PrintWriter(file);
-//        printWriter.println(data.nazwisko);
-//        printWriter.println(data.imie);
-//        printWriter.println(data.przedmioty_od);
-//        printWriter.println(data.przedmioty_do);
-//        printWriter.println(data.podsumowanie_od);
-//        printWriter.println(data.podsumowanie_do);
-//        printWriter.println(data.przedmioty);
+//        printWriter.println(aktualny.nazwisko);
+//        printWriter.println(aktualny.imie);
+//        printWriter.println(aktualny.przedmioty_od);
+//        printWriter.println(aktualny.przedmioty_do);
+//        printWriter.println(aktualny.podsumowanie_od);
+//        printWriter.println(aktualny.podsumowanie_do);
+//        printWriter.println(aktualny.przedmioty);
 //        printWriter.close();
 //    }
 
 
 //    public static DataPlace readFromFile() throws IOException {
-//        BufferedReader fileReader = new BufferedReader(new FileReader("src\\main\\resources\\data.txt"));
+//        BufferedReader fileReader = new BufferedReader(new FileReader("src\\main\\resources\\aktualny.txt"));
 //        DataPlace place = new DataPlace(Integer.parseInt(fileReader.readLine()), Integer.parseInt(fileReader.readLine()), Integer.parseInt(fileReader.readLine()), Integer.parseInt(fileReader.readLine()), Integer.parseInt(fileReader.readLine()), Integer.parseInt(fileReader.readLine()), Integer.parseInt(fileReader.readLine()));
 //        fileReader.close();
 //        return place;

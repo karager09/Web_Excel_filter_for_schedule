@@ -2,9 +2,8 @@ package server;
 
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.file.Files;
+import java.util.*;
 
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -12,7 +11,6 @@ import org.apache.poi.util.IOUtils;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -29,7 +27,9 @@ public class SearchController {
     @Autowired
     private UserService userService;
 
-    private static Thread resetThread;
+
+
+    private static Map<String, Thread> threadMap = new HashMap<>();
 
 
 //    @PostMapping(value = "/api/search/lastname")
@@ -38,67 +38,60 @@ public class SearchController {
 //    }
 
 
-    //trzeba poprawic zeby wyszukiwalo w odpowiednim pliku
     @PostMapping(value = "/api/{fileName}/search/fullname")
     public boolean searchLecturerByFullname(@PathVariable String fileName,@RequestBody Lecturer lecturer) throws IOException, InvalidFormatException {
 
-        return Parser.findLecturer(lecturer.getLastName(), lecturer.getFirstName());
+        return Parser.findLecturer(fileName, lecturer.getLastName(), lecturer.getFirstName());
     }
 
 
-    //tutaj pobieram nazwy dostepnych plikow
-    //pierwszy pobrany jest domyslny
     @GetMapping("/api/files")
     public String[] getNameOfFiles() throws IOException {
 
-        return new String[]{"rozklad.xlsx","jakies_rozklad_2.xlsx","plik_3.xlsx"};
+        return FilesController.getAllSchedules();
     }
 
-    //usuwasz odpowiedni plik
     @DeleteMapping("/api/files/{fileName}")
     public boolean deleteFile(@PathVariable String fileName) throws IOException {
+        return FilesController.deleteSchedule(fileName);
 
-        return true;
     }
 
     @RequestMapping(value = "/api/calc/file", method = RequestMethod.POST, produces = {"application/json"})
     public @ResponseBody boolean echoFile(MultipartHttpServletRequest request/*,
                                                           HttpServletResponse response*/) throws Exception {
 
-
+        FilesController.renameActualScheduleFile();
         MultipartFile multipartFile = request.getFile("plik");
        // Long size = multipartFile.getSize();
        // String contentType = multipartFile.getContentType();
         InputStream stream = multipartFile.getInputStream();
         byte[] bytes = IOUtils.toByteArray(stream);
-
-        try (FileOutputStream fos = new FileOutputStream("src\\main\\resources\\rozklad.xlsx")) {
+        try (FileOutputStream fos = new FileOutputStream("src\\main\\resources\\parser\\schedule\\aktualny.xlsx")) {
             fos.write(bytes);
         }
 
         return true;
     }
 
-//TUTAJ MUSISZ WSTAWIC DANE, KTÓRE SĄ ZAPISANE NA SERWERZE, TAK ZEBYM JE WSTAWIL DO FORMULARZA
-    //zmiana
+
     @GetMapping("/api/{fileName}/calc/info")
     public DataPlace getDataPlaceInfo(@PathVariable String fileName) throws IOException {
-        return FilesController.readDataInfo();
+        return FilesController.readDataInfo(fileName);
     }
 
-    //zmiana
+
     @PostMapping("/api/{fileName}/calc/info")
     public boolean saveDataPlaceInfo(@PathVariable String fileName, @RequestBody DataPlace dataPlace) {
-        FilesController.saveDataInfo(dataPlace);
+        FilesController.saveDataInfo(fileName, dataPlace);
         return true;
     }
 
 
-    //INFO O TYM CO JEST DO WYBORU PRZY POKAZYWANIU
-    //trzeba zmienic na konkretny plik
+
     @GetMapping("/api/{fileName}/what_to_show")
     public String[] getDataInfo(@PathVariable String fileName) throws IOException, InvalidFormatException {
-        return findData();
+        return findData(fileName);
     }
 
 
@@ -134,40 +127,48 @@ public class SearchController {
 
 
 //    @PostMapping("/api/lecturer/{lastName}")
-//    public String getLecturerData(@PathVariable String lastName, @RequestBody String[] data) throws IOException, InvalidFormatException {
-//        return prepareData(findLecturerColumn(lastName),data).toString();
+//    public String getLecturerData(@PathVariable String lastName, @RequestBody String[] aktualny) throws IOException, InvalidFormatException {
+//        return prepareData(findLecturerColumn(lastName),aktualny).toString();
 //    }
 
-    //zmiana na konkretny plik
     @PostMapping("/api/{fileName}/lecturer/{lastName}/{firstName}")
     public String getLecturerData(@PathVariable String fileName,@PathVariable String lastName, @PathVariable String firstName, @RequestBody String[] data) throws IOException, InvalidFormatException {
 
-        return prepareData(findLecturerColumn(lastName,firstName),data).toString();
+        return prepareData(fileName, findLecturerColumn(fileName, lastName,firstName),data).toString();
     }
 
     //TUTAJ USTAW NOWE HASLO
     @PostMapping("/api/reset/{number}")
-    public boolean setNewPassword(@PathVariable String number,  @RequestBody String password) {
-        try {
-            if(new BCryptPasswordEncoder().matches(number, FilesController.getResetCode())){
-                userService.updatePassword(password);
-                if(resetThread != null) resetThread.interrupt();
-                FilesController.deleteResetFile();
-                return true;
-            }
-            else return false;
-        } catch (IOException e) {
-            return false;
-        }
+    public boolean setNewPassword(@PathVariable String number,  @RequestBody String password) throws IOException {
+//        try {
+//            if(FilesController.checkResetCode(number)){
+//                userService.updatePassword(password);
+//                if(resetThread != null) resetThread.interrupt();
+//               // FilesController.deleteResetFile();
+//                return true;
+//            }
+//            else return false;
+//        } catch (IOException e) {
+//            return false;
+//        }
+        return FilesController.checkResetCode(userService, number, password);
     }
 
 
-    @GetMapping("/api/reset")
-    public boolean sendEmailWithActivationNumber() {
-        if(resetThread != null) resetThread.interrupt();
-        resetThread = new Thread(new MailController());
-        resetThread.start();
-        //MailController.sendResetLink();
+    @GetMapping("/api/reset/{username}")
+    public boolean sendEmailWithActivationNumber(@PathVariable String username) {
+        System.out.println(username);
+        if(threadMap.containsKey(username)) {
+            threadMap.get(username).interrupt();
+            threadMap.remove(username);
+        }
+        Thread thread = new Thread(new MailController(username));
+        threadMap.put(username, thread);
+        thread.start();
+//        if(resetThread != null) resetThread.interrupt();
+//        resetThread = new Thread(new MailController(username));
+//        resetThread.start();
+//        //MailController.sendResetLink();
         return true;
     }
 
@@ -175,8 +176,22 @@ public class SearchController {
     //tutaj trzeba zarejestrowac nowego uzytkownika, wyslac maila do mastera? do tego kogos?
     @PostMapping("/api/register")
     public boolean register(@RequestBody String email) {
-        System.out.println(email);
-        return true;
+        //System.out.println(email);
+        return FilesController.register(email);
+        //
+
     }
+
+
+    @GetMapping("/api/confirm/{number}")
+    public void confirmRegister(@PathVariable String number){
+        try {
+            FilesController.checkConfirmCode(number);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
