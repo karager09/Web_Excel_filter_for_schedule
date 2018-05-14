@@ -75,7 +75,7 @@ public class MailController implements Runnable{
             resetCode += generator.nextInt(10);
         }
         FilesController.setResetCode(username, resetCode);
-        String subject = "Zresetuj swohe hasło do serwisu przydziału godzin AGH";
+        String subject = "Zresetuj swoje hasło do serwisu przydziału godzin AGH";
         String body = "\uFEFF\n" +
                 "Otrzymaliśmy żądanie zresetowania hasła wysłane z Twojego konta. Jeśli nie zostało ono wysłane przez Ciebie, zignoruj tę wiadomość e-mail. Na Twoim koncie nie nastąpią żadne zmiany.\n" +
                 "\n" +

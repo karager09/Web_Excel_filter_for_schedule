@@ -1,3 +1,9 @@
+//plik includowany w admin_panel
+
+/**
+ * Przesyla informacje wykorzsytywane w DataPlace,
+ * dzięki temu definiujemy gdzie znajdują się informacje w konkretnych plikach
+ */
 function przeslij_informacje(){
 
     var nazwisko = $("#nazwisko").val();
@@ -41,6 +47,10 @@ function przeslij_informacje(){
     }
 }
 
+/**
+ * Pobieramy dane z DataPlace, czyli informacje o strukturze zapisanych plików
+ * @param fileName plik nas interesujący
+ */
 function pobierz_dane(fileName){
 
     $.ajax({
@@ -58,7 +68,9 @@ function pobierz_dane(fileName){
     })
 }
 
-
+/**
+ * Przesył pliku wybranego w formularzu do tego przygotowanym
+ */
 function przeslij_plik(){
 
     var plik = $('#plik');
@@ -76,6 +88,7 @@ function przeslij_plik(){
         processData: false,
         contentType: false
     }).done(function(data) {
+        location.reload();
         alert("Plik przesłany!");
     }).fail(function(jqXHR, textStatus) {
         alert('File upload failed ...');
@@ -108,7 +121,10 @@ function przypomnij_haslo(){
     alert("Nowe hasło zostanie wysłane");
 }
 
-
+/**
+ * Wstawiamy nazwy wszystkich dostępnych plików w admin_panel,
+ * tak żeby można było usunąć niepotrzebne za pomocą odpowiedniego przycisku.
+ */
 function wstaw_pliki(){
     $.ajax({
         url: "http://localhost:8080/api/files",
@@ -128,7 +144,10 @@ function wstaw_pliki(){
     });
 }
 
-
+/**
+ * Usuwa plik z serwera.
+ * @param fileName nazwa pliku do usuniecia
+ */
 function usun_plik(fileName){
     $.ajax({
         url: "http://localhost:8080/api/files/"+fileName,
@@ -139,6 +158,10 @@ function usun_plik(fileName){
 
 }
 
+/**
+ * W zależności od tego jaki plik jest aktualnie wybrany pokazujemy
+ * strukture odnoszaca sie do niego.
+ */
 function update_info(){
     pobierz_dane($( "#wybierz_plik option:selected" ).text());
 }

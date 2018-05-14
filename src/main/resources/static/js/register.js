@@ -1,3 +1,6 @@
+/**
+ * Metoda wysylajaca zadanie rejestracji nowego uzytkownika.
+ */
 function send(){
     var email = $("#email").val();
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

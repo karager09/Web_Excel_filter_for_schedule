@@ -1,122 +1,19 @@
-/*function wyslij()
-{
-    var name = $("#nazwisko").val();
-
-    $.ajax({
-        url: "http://localhost:8080/api/search/lastname",
-        datatype : 'json',
-        type : "post",
-        contentType : "application/json",
-        aktualny : JSON.stringify({
-            lastName: name
-        })
-    }).then(function(aktualny, status, jqxhr) {
-        //document.write("Dostalem odpowiedz: "+aktualny);
-        if(aktualny === true) //document.write("Prowadzacy "+name+" istnieje!");
-        {
-            localStorage.setItem("name", name);
-            window.location.href = "/info";
-
-        }
-        else potrzebaJeszczeImie();
-    });
-}
-
-
-function potrzebaJeszczeImie(){
-    $('#imie_div').append("<label for=\"imie\">Podaj imię:</label>\n" +
-        "<input type=\"text\" class=\"form-control\" id=\"imie\">" +
-    "<br>");
-
-    $('#send').attr("onclick", "wyslijZImieniem()");
-}
-*/
-
-
-function wyslijZImieniem(){
-
-    var name = $("#nazwisko").val();
-    var imie = $("#imie").val();
-    var file = $("#wybierz_plik").val();
-
-    $.ajax({
-        url: "http://localhost:8080/api/"+file+"/search/fullname",
-        datatype : 'json',
-        type : "post",
-        contentType : "application/json",
-        data : JSON.stringify({
-            lastName: name,
-            firstName: imie
-        })
-
-
-    }).then(function(data, status, jqxhr) {
-        if(data === true) //document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
-        {
-            localStorage.setItem("name", name+"/"+imie);
-            localStorage.setItem("file", file);
-            window.location.href = "/info";
-
-        }
-        else nieMaTakiegoUzytkownika();
-    });
-
-}
-
-function nieMaTakiegoUzytkownika(){
-    $("#blad").html("<h2>Podałeś złe dane!</h2>");
-
-    $("#nazwisko").val('');
-    $('#imie').val('');
-}
-
-
-
-function dodaj_info(id){
-    //var id = "cos";
-    //id = localStorage.getItem("nazwisko");
-    var identity = id.replace(/\"/g,' ').replace(/ /g,'_');
-    $('#jakie_info').append('<div><input type="checkbox" class="check_class filled-in form-check-input" id=\"'+identity+'\" checked="checked"> <label class="form-check-label" for='+id+'>'+id+'</label> </div><br>');
-
-}
-
-function dodaj_jakie_info(){
-
-    $.ajax({
-        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/what_to_show",
-        type : "get"
-    }).then(function(data) {
-        for(var i in data)
-        {
-            dodaj_info(data[i]);
-        }
-
-    });
-}
-
-
-function send_request_lecturer(){
-
-    var tab = new Array();
-
-    $(".check_class").each(function () {
-        if(this.checked)
-        tab.push(this.id.replace(/_/g," "));
-
-    });
-
-    //alert(tab);
-    localStorage.setItem("data", JSON.stringify(tab));
-
-    window.location.href = "/aktualny";
-}
-
-
+/**
+ * Dla /data
+ * Dodajemy jeden wiersz do tabelki danych
+ * @param where - gdzie wstawiamy (zwykle dane czy dla przedmiotow)
+ * @param first - co w pierwszej kolumnie
+ * @param second - co w drugiej kolumnie
+ */
 function add_row(where,first,second){
     $(where).append('<tr><td>'+first+'</td> <td>'+second+'</td> </tr>');
 
 }
 
+/**
+ * Dla /data
+ * Wstawiamy informacje o ilosci godzin itp. otrzymane od serwera
+ */
 function add_information(){
     var name = localStorage.getItem("name");
     var info = localStorage.getItem("data");
@@ -159,82 +56,19 @@ function add_information(){
 
 }
 
+/**
+ * Drukujemy lub zapisujemy plik.
+ */
 function export_to_pdf(){
     window.print();
 }
 
 
-function change_check(number){
-
-    $.ajax({
-        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/profile/"+number,
-        type : "get"
-    }).then(function(data) {
-        //var example = ["pensum","zniżka pensum"];
-
-        for (var i in data) {
-            data[i] = data[i].replace(/\"/g, ' ').replace(/ /g, '_').toUpperCase();
-        }
-
-
-        $(".check_class").each(function () {
-            var flag = false;
-
-            for (var i in data) {
-                if (data[i] == this.id) flag = true;
-            }
-
-            if (flag == true) this.checked = true;
-            else this.checked = false;
-
-        });
-
-    });
-}
-
-function get_all_alias(){
-
-    for(var number=1; number<5; ++number){
-        get_alias(number);
-    }
-}
-
-function get_alias(number){
-    $.ajax({
-        url: "http://localhost:8080/api/"+localStorage.getItem("file")+"/profile/name/"+number,
-        type : "get"
-    }).then(function(data) {
-        $("#change" + number).html(data);
-    });
-}
-
-function save_as(number){
-
-    if($("#change_name_"+number).val() != ""){
-        var tab = new Array();
-        $(".check_class").each(function () {
-            if(this.checked)
-                tab.push(this.id.replace(/_/g," "));
-
-        });
-
-        $.ajax({
-            url: "http://localhost:8080/api/"+localStorage.getItem("file")+"profile/" + number + "/name/" + $("#change_name_"+number).val(),
-            datatype : 'json',
-            type : "post",
-            contentType : "application/json",
-            data : JSON.stringify(tab)
-            // aktualny : $("#change_name_"+number).val()
-        }).then(function() {
-            $("#change" + number).html($("#change_name_"+number).val());
-            $("#change_name_"+number).val('');
-        });
-
-    }
-
-}
-
-
+/**
+ * Dla /reset
+ * Ustawiamy nowe haslo.
+ * Jesli dane sa poprawne to wysylamy na serwer zadanie zmiany hasla.
+ */
 function wyslij_nowe_haslo(){
 
     if($("#haslo").val() == $("#haslo2").val()) {
@@ -261,6 +95,10 @@ function wyslij_nowe_haslo(){
     }else {alert("Podane hasła różnią się od siebie.");}
 }
 
+/**
+ * Dla /login
+ * Jesli nie udalo nam sie zalogowac to pokazujemy przycisk i resetujemy haslo
+ */
 function zresetuj_haslo(){
 
     var email = localStorage.getItem("email");
@@ -273,7 +111,10 @@ function zresetuj_haslo(){
     });
 }
 
-
+/**
+ * Dla /data
+ * Wstawiamy nazwisko prowadzacego zeby ladnie wygladalo.
+ */
 function wstaw_nazwisko(){
 
     var name = localStorage.getItem("name");
@@ -287,19 +128,6 @@ function wstaw_nazwisko(){
     $('#nazwa_prowadzacego').append(imie +" "+ nazwisko);
 }
 
-
-function wstaw_pliki(){
-    $.ajax({
-        url: "http://localhost:8080/api/files",
-        type : "get"
-    }).then(function(data) {
-
-        for(var i in data)
-            if(i==0) $('#wybierz_plik').append('<option value="'+data[i]+'" selected>'+data[i]+'</option>');
-            else $('#wybierz_plik').append('<option value="'+data[i]+'">'+data[i]+'</option>');
-
-    });
-}
 
 function zapisz_nazwe(){
     var email = $("#email").val();
