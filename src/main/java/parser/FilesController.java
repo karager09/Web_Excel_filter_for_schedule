@@ -3,9 +3,8 @@ package parser;
 
 
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import server.UserService;
+import server.security.UserService;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,64 +27,119 @@ public class FilesController {
     private static final String NEWBIES_PATH = "src\\main\\resources\\users\\newbies\\";
 
 
-    private static void saveToFile(String path, List<String> data){
+    private static void saveToFile(String path, List<String> data) throws IOException {
         try {
             Files.write(Paths.get(path), data);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IOException();
         }
     }
 
-    private static void saveToFile(String path, String data){
+    private static void saveToFile(String path, String data) throws IOException {
         try {
             Files.write(Paths.get(path), data.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IOException();
         }
     }
 
     private static List<String> readFromFile(String path) throws IOException {
-        if(Files.exists(Paths.get(path))) {
-
-            return Files.readAllLines(Paths.get(path));
-        }
-
-        else return null;
-
+        return Files.readAllLines(Paths.get(path));
     }
 
-    private static void renameFile(String path, String newName) throws IOException {
+    private static void renameFile(String path, String newName) throws Exception {
         Path source = Paths.get(path);
-        if(Files.exists(source)){
+        try {
             Files.move(source, source.resolveSibling(newName));
+        } catch (IOException e) {
+            throw new Exception();
         }
-
     }
 
-    public static void saveDataInfo(String fileName, DataPlace dataPlace){
+    /**
+     *
+     * @param fileName nazwa pliku w którym zapiszemy konfigurację Excela
+     * @param dataPlace dane konfiguracji Excela
+     */
+    public static void saveDataInfo(String fileName, DataPlace dataPlace) throws IOException{
         saveToFile(DATA_INFO_PATH+fileName.replace(".xlsx",""), dataPlace.toList());
     }
 
-    public static DataPlace readDataInfo(String fileName) throws IOException {
-        return new DataPlace(readFromFile(DATA_INFO_PATH+fileName.replace(".xlsx", "")));
-    }
-
+    /**
+     * Owiera plik z danymi
+     * @param fileName plik z którego chcemy czytać dane
+     * @return zwraca plik z którego będziemy czytać dane
+     */
     public static File getSchedule(String fileName){
         return new File(SCHEDULE_PATH+fileName);
     }
 
-    public static void saveProfile(int number, List<String> newData){
-        saveToFile(PROFILES_PATH+number, newData);
+    /**
+     *
+     * @param fileName plik z którego chcemy odczytać konfigurację
+     * @return zwraca konfigurację
+     * @throws IOException jeżeli nie ma takiego pliku lub atalogu
+     */
+    public static DataPlace readDataInfo(String fileName) throws IOException {
+        return new DataPlace(readFromFile(DATA_INFO_PATH+fileName.replace(".xlsx", "")));
     }
 
-    public static String getProfileName(int number) throws IOException {
-        if(Files.exists(Paths.get(PROFILES_PATH+number))){
-            return readFromFile(PROFILES_PATH+number).get(0);
+    /**
+     * Zwraca nazwy wszystkich dostępnych plików z rozkładem zajęć
+     * @return Zwraca nazwy wszystkich dostępnych plików z rozkładem zajęć
+     * @throws Exception w przypadku problemów z plikami
+     */
+    public static String[] getAllSchedules() throws Exception {
+        List<String> files = new ArrayList<>();
+        String[] result = {};
+        try (Stream<Path> paths = Files.walk(Paths.get(SCHEDULE_PATH))) {
+            paths
+                    .filter(Files::isRegularFile)
+                    .forEach(s -> {
+                        if(s.getFileName().toString().equals("aktualny.xlsx")){
+                            files.add(0, s.getFileName().toString());
+                        }else files.add(s.getFileName().toString());
+                    });
+        } catch (IOException e) {
+            throw new Exception();
         }
-        else
-            return "BRAK PROFILU";
+        return files.toArray(result);
     }
 
+    /**
+     * kasuje plik Excel o podanej nazwie wraz z jego konfiguracją
+     * @param name nazwa pliku do skasowania
+     * @return zwraca informację o powodzeniu
+     */
+    public static boolean deleteSchedule(String name){
+        try {
+            deleteFile(SCHEDULE_PATH+name);
+            deleteFile(DATA_INFO_PATH+name.replace(".xlsx", ""));
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Zmienia nazwę aktualnego pliku z rozkładem zajęć na przestarzały
+     */
+    public static void renameActualScheduleFile() throws Exception{
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String newName = ""+localDateTime.getYear()+localDateTime.getMonth()+localDateTime.getDayOfMonth()+localDateTime.getHour()+localDateTime.getMinute();
+        renameFile(SCHEDULE_PATH+"aktualny.xlsx", newName+".xlsx");
+        renameFile(DATA_INFO_PATH+"aktualny", newName+"");
+        Files.copy(Paths.get(DATA_INFO_PATH+newName), Paths.get(DATA_INFO_PATH+"aktualny"),StandardCopyOption.REPLACE_EXISTING);
+
+
+    }
+
+    /**
+     * Zwraca dane profilu
+     * @param number numer profilu
+     * @return dane profilu
+     * @throws IOException
+     */
     public static String[] getProfileBody(int number) throws IOException {
         String[] result = {};
         if(Files.exists(Paths.get(PROFILES_PATH+number))){
@@ -96,27 +150,40 @@ public class FilesController {
         return result;
     }
 
-    public static String getPassword(String userName) throws IOException {
-        return readFromFile(PASSWORD_PATH+userName).get(0);
-    }
-//    public static String getMasterPassword() throws IOException {
-//        return readFromFile(PASSWORD_PATH+"master").get(0);
-//    }
-
-    public static void setPassword(String userName, String password) {
-        saveToFile(PASSWORD_PATH+userName, new BCryptPasswordEncoder().encode(password));
-    }
-
-    private static String getResetCode(String fileName) throws IOException {
-        return readFromFile(PASSWORD_RESET_PATH+fileName).get(0);
-    }
-    private static String getConfirmCode(String fileName) throws IOException {
-        return readFromFile(NEWBIES_PATH+fileName).get(0);
+    /**
+     * Zapisuje profil o danum numerze
+     * @param number numer profilu
+     * @param newData dane profilu
+     * @throws IOException
+     */
+    public static void saveProfile(int number, List<String> newData) throws IOException {
+        saveToFile(PROFILES_PATH+number, newData);
     }
 
+    /**
+     * Zwraca nazwę profilu o zadanym numerze
+     * @param number numer profilu
+     * @return
+     * @throws IOException
+     */
+    public static String getProfileName(int number) throws IOException {
+        if(Files.exists(Paths.get(PROFILES_PATH+number))){
+            return readFromFile(PROFILES_PATH+number).get(0);
+        }
+        else
+            return "BRAK PROFILU";
+    }
+
+
+    /**
+     *  sprawdze poprawność linku do resetowania hasła i zmienia hasło
+     * @param userService czyje hasło ma zostać zmienione
+     * @param number kod do walidacji linku
+     * @param password nowe hasło
+     * @return
+     * @throws IOException
+     */
     public static boolean checkResetCode(UserService userService, String number, String password) throws IOException {
-//        return readFromFile(PASSWORD_RESET_PATH).get(0);
-//        new BCryptPasswordEncoder().matches(number, FilesController.getResetCode())
         List<String> files = new ArrayList<>();
         try (Stream<Path> paths = Files.walk(Paths.get(PASSWORD_RESET_PATH))) {
             paths
@@ -137,16 +204,83 @@ public class FilesController {
         return false;
     }
 
-    public static void setResetCode(String userName, String resetCode) {
+
+    /**
+     * zwraca hasło użytkownika z pliku
+     * @param userName czyje hasło
+     * @return
+     * @throws IOException
+     */
+    public static String getPassword(String userName) throws IOException {
+        return readFromFile(PASSWORD_PATH+userName).get(0);
+    }
+//    public static String getMasterPassword() throws IOException {
+//        return readFromFile(PASSWORD_PATH+"master").get(0);
+//    }
+
+    /**
+     * ustawia nowe hasło dla uzytkownika
+     * @param userName dla kogo
+     * @param password nowe hasło
+     * @throws IOException
+     */
+    public static void setPassword(String userName, String password) throws IOException {
+        saveToFile(PASSWORD_PATH+userName, new BCryptPasswordEncoder().encode(password));
+    }
+
+    /**
+     * zwraca kod walidacyjny do resetu hasła
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    private static String getResetCode(String fileName) throws IOException {
+        return readFromFile(PASSWORD_RESET_PATH+fileName).get(0);
+    }
+
+    /**
+     * zwraca kod walidacyjny do rejestracji uzytkownika
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    private static String getConfirmCode(String fileName) {
+
+        try {
+            return readFromFile(NEWBIES_PATH+fileName).get(0);
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+
+    /**
+     * ustawia kod walidacyjny do resetu hasła
+     * @param userName
+     * @param resetCode
+     * @throws IOException
+     */
+    public static void setResetCode(String userName, String resetCode) throws IOException {
         saveToFile(PASSWORD_RESET_PATH+userName, new BCryptPasswordEncoder().encode(resetCode));
     }
 
-    public static void setConfirmCode(String userName, String resetCode) {
+    /**
+     * ustawia kod walidacyjny do rejestracji uzytkownika
+     * @param userName
+     * @param resetCode
+     * @throws IOException
+     */
+    public static void setConfirmCode(String userName, String resetCode) throws IOException {
         saveToFile(NEWBIES_PATH+userName, new BCryptPasswordEncoder().encode(resetCode));
     }
 
 
-
+    /**
+     * sprawdza popranowść kodu walidacyjnego do rejestracji użytkownika
+     * @param number
+     * @return
+     * @throws IOException
+     */
     public static boolean checkConfirmCode(String number) throws IOException {
 //        return readFromFile(PASSWORD_RESET_PATH).get(0);
 //        new BCryptPasswordEncoder().matches(number, FilesController.getResetCode())
@@ -171,7 +305,12 @@ public class FilesController {
 
     }
 
-        private static void createNewUser(String username){
+    /**
+     * tworzy nowego użytkownika
+     * @param username
+     * @throws IOException
+     */
+    private static void createNewUser(String username) throws IOException {
         PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
                 .useDigits(true)
                 .useLower(true)
@@ -184,7 +323,10 @@ public class FilesController {
     }
 
 
-
+    /**
+     * kasuje plik po poprawnym zresetowaniu hasła
+     * @param userName
+     */
     public static void deleteResetFile(String userName){
         try {
             Files.delete(Paths.get(PASSWORD_RESET_PATH+userName));
@@ -192,6 +334,11 @@ public class FilesController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * kasuje plik po poprawnym zarejestrowaniu uzytkownika
+     * @param userName
+     */
     public static void deleteConfirmFile(String userName){
         try {
             Files.delete(Paths.get(NEWBIES_PATH+userName));
@@ -200,61 +347,29 @@ public class FilesController {
         }
     }
 
-    public static void renameActualScheduleFile(){
-        try {
-            LocalDateTime localDateTime = LocalDateTime.now();
-            String newName = ""+localDateTime.getYear()+localDateTime.getMonth()+localDateTime.getDayOfMonth()+localDateTime.getHour()+localDateTime.getMinute();
-            renameFile(SCHEDULE_PATH+"aktualny.xlsx", newName+".xlsx");
-            renameFile(DATA_INFO_PATH+"aktualny", newName+"");
-            Files.copy(Paths.get(DATA_INFO_PATH+newName), Paths.get(DATA_INFO_PATH+"aktualny"),StandardCopyOption.REPLACE_EXISTING);
-            //System.out.println(""+localDateTime.getYear()+localDateTime.getMonth()+localDateTime.getDayOfMonth()+localDateTime.getHour()+localDateTime.getMinute());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
-
-    public static String[] getAllSchedules(){
-        return getAllFilesName("aktualny.xlsx", SCHEDULE_PATH);
-
-    }
-
+    /**
+     * sprawdza czy użytkownik istnieje
+     * @param username
+     * @return
+     */
     public static boolean checkUserName(String username){
         return Files.exists(Paths.get(PASSWORD_PATH + username));
     }
 
-    private static String[] getAllFilesName(String exception, String path){
-        List<String> files = new ArrayList<>();
-        String[] result = {};
-        try (Stream<Path> paths = Files.walk(Paths.get(SCHEDULE_PATH))) {
-            paths
-                    .filter(Files::isRegularFile)
-                    .forEach(s -> {
-                        if(s.getFileName().toString().equals(exception)){
-                                files.add(0, s.getFileName().toString());
-                        }else files.add(s.getFileName().toString());
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return files.toArray(result);
-    }
 
     private static void deleteFile(String path) throws IOException {
         Files.delete(Paths.get(path));
     }
 
-    public static boolean deleteSchedule(String name){
-        try {
-            deleteFile(SCHEDULE_PATH+name);
-            deleteFile(DATA_INFO_PATH+name.replace(".xlsx", ""));
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
 
-    public static boolean register(String email){
+    /**
+     * wysyła powiadomienie do mastera o nowej próbie rejestracji
+     * @param email
+     * @return
+     * @throws IOException
+     */
+    public static boolean register(String email) throws IOException {
         if(!Files.exists(Paths.get(PASSWORD_PATH + email))){
             MailController.sendNotification(email);
             return true;

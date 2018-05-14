@@ -1,4 +1,4 @@
-package server;
+package server.security;
 
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +15,9 @@ public class UserService implements UserDetailsService {
     private static final String ROLE = "ADMIN";
 
     @Override
+    /**
+     * wczytanie uzytkoniwka do konfiguracji serwera
+     */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetails user =
                 null;
@@ -39,7 +42,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void updatePassword(String userName, String password) {
+    public void updatePassword(String userName, String password) throws IOException {
         FilesController.setPassword(userName, password);
     }
 }

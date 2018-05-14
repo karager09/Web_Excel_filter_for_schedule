@@ -28,7 +28,6 @@ function add_information(){
 
         var parsed = JSON.parse(data);
         var keys = Object.keys(parsed);
-
         for(var i in keys){
             if(keys[i] !== "przedmioty")
             add_row('#data_body', keys[i],parsed[keys[i]]);
@@ -49,8 +48,8 @@ function add_information(){
         //alert(parsed[keys[0]]);
         //alert(aktualny);
 
-    }).fail(function(jqXHR, textStatus) {
-        alert('BLAD!!');
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        alert("Błąd");
     });
 
 

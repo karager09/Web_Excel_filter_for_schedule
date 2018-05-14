@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * generator haseł
+ */
 public final class PasswordGenerator {
 
     private static final String LOWER = "abcdefghijklmnopqrstuvwxyz";

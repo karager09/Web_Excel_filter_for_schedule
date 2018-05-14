@@ -8,13 +8,16 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Kontroler wysyłania maili
+ */
 public class MailController implements Runnable{
 
     private static final String USER_NAME = "przydzialgodzin.agh";  // GMail user name (just the part before "@gmail.com")
@@ -67,7 +70,7 @@ public class MailController implements Runnable{
         }
     }
 
-    public static void sendResetLink(String username){
+    public static void sendResetLink(String username) throws IOException {
         Random generator = new Random();
         generator.nextInt(10);
         String resetCode = "";
@@ -82,7 +85,7 @@ public class MailController implements Runnable{
                 "Aby zresetować hasło, kliknij poniższe łącze: \n" +
                 "http://localhost:8080/reset?" + resetCode +
                 "\n" +
-                "UWAGA! Łącze jest dostępne tylko przez godzinę.\n" +
+                "UWAGA! Łączę dostępne prze godzinę.\n" +
                 "\n" +
                 "Pozdrawiamy, Serwis Przydziału Godzin AGH";
         String[] emailList = {username};
@@ -90,7 +93,7 @@ public class MailController implements Runnable{
 
     }
 
-    public static void sendNotification(String username){
+    public static void sendNotification(String username) throws IOException {
         Random generator = new Random();
         generator.nextInt(10);
         String confirmCode = "";
@@ -131,7 +134,11 @@ public class MailController implements Runnable{
 
     @Override
     public void run() {
-        sendResetLink(username);
+        try {
+            sendResetLink(username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             TimeUnit.HOURS.sleep(1);
         } catch (InterruptedException e) {

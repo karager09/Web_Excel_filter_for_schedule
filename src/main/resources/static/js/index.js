@@ -58,14 +58,14 @@ function wyslijZImieniem(){
 
 
     }).then(function(data, status, jqxhr) {
-        if(data === true) //document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
+        if(data === "OK") //document.write("Prowadzacy "+name+", "+ imie+" istnieje!");
         {
             localStorage.setItem("name", name+"/"+imie);
             localStorage.setItem("file", file);
             window.location.href = "/info";
 
         }
-        else nieMaTakiegoUzytkownika();
+        else nieMaTakiegoUzytkownika(data);
     });
 
 }
@@ -73,8 +73,8 @@ function wyslijZImieniem(){
 /**
  * Jesli podane przez nas nazwisko i imie prowadzacego nie figuruje w pliku wyswietlamy odpowiednia informacje.
  */
-function nieMaTakiegoUzytkownika(){
-    $("#blad").html("<h2>Podałeś złe dane!</h2>");
+function nieMaTakiegoUzytkownika(data){
+    $("#blad").html("<h2>" +data+ "</h2>");
 
     $("#nazwisko").val('');
     $('#imie').val('');
