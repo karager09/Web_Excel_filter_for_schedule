@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +171,7 @@ public class FilesController {
 
     }
 
-    private static void createNewUser(String username){
+        private static void createNewUser(String username){
         PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
                 .useDigits(true)
                 .useLower(true)
@@ -205,7 +206,7 @@ public class FilesController {
             String newName = ""+localDateTime.getYear()+localDateTime.getMonth()+localDateTime.getDayOfMonth()+localDateTime.getHour()+localDateTime.getMinute();
             renameFile(SCHEDULE_PATH+"aktualny.xlsx", newName+".xlsx");
             renameFile(DATA_INFO_PATH+"aktualny", newName+"");
-
+            Files.copy(Paths.get(DATA_INFO_PATH+newName), Paths.get(DATA_INFO_PATH+"aktualny"),StandardCopyOption.REPLACE_EXISTING);
             //System.out.println(""+localDateTime.getYear()+localDateTime.getMonth()+localDateTime.getDayOfMonth()+localDateTime.getHour()+localDateTime.getMinute());
         } catch (IOException e) {
             e.printStackTrace();
