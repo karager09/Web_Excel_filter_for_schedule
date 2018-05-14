@@ -146,7 +146,7 @@ public class FilesController {
 
 
 
-    public static void checkConfirmCode(String number) throws IOException {
+    public static boolean checkConfirmCode(String number) throws IOException {
 //        return readFromFile(PASSWORD_RESET_PATH).get(0);
 //        new BCryptPasswordEncoder().matches(number, FilesController.getResetCode())
         List<String> files = new ArrayList<>();
@@ -163,8 +163,11 @@ public class FilesController {
             if(new BCryptPasswordEncoder().matches(number, FilesController.getConfirmCode(fileName))){
                 createNewUser(fileName);
                 deleteConfirmFile(fileName);
+                return true;
             }
         }
+        return false;
+
     }
 
     private static void createNewUser(String username){

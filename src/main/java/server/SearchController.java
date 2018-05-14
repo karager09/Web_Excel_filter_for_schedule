@@ -184,11 +184,12 @@ public class SearchController {
 
 
     @GetMapping("/api/confirm/{number}")
-    public void confirmRegister(@PathVariable String number){
+    public String confirmRegister(@PathVariable String number){
         try {
-            FilesController.checkConfirmCode(number);
+            if(FilesController.checkConfirmCode(number)) return "Użytkownik został dodany.";
+            else return "Błędny link potwierdzający.";
         } catch (IOException e) {
-            e.printStackTrace();
+            return "Błąd";
         }
     }
 
