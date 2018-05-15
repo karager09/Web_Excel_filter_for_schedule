@@ -127,11 +127,11 @@ public class FilesController {
     public static void renameActualScheduleFile() throws Exception{
         LocalDateTime localDateTime = LocalDateTime.now();
         String newName = ""+localDateTime.getYear()+localDateTime.getMonth()+localDateTime.getDayOfMonth()+localDateTime.getHour()+localDateTime.getMinute();
-        renameFile(SCHEDULE_PATH+"aktualny.xlsx", newName+".xlsx");
-        renameFile(DATA_INFO_PATH+"aktualny", newName+"");
-        Files.copy(Paths.get(DATA_INFO_PATH+newName), Paths.get(DATA_INFO_PATH+"aktualny"),StandardCopyOption.REPLACE_EXISTING);
-
-
+        if(Files.exists(Paths.get(SCHEDULE_PATH+"aktualny.xlsx"))){
+            renameFile(SCHEDULE_PATH+"aktualny.xlsx", newName+".xlsx");
+            renameFile(DATA_INFO_PATH+"aktualny", newName+"");
+            Files.copy(Paths.get(DATA_INFO_PATH+newName), Paths.get(DATA_INFO_PATH+"aktualny"),StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     /**
