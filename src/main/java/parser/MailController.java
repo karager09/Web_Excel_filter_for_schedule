@@ -22,7 +22,7 @@ public class MailController implements Runnable{
 
     private static final String USER_NAME = "przydzialgodzin.agh";  // GMail user name (just the part before "@gmail.com")
     private static final String PASSWORD = "r1fa035ab"; // GMail password
-    public static final String MASTER = "adam.buczek17@gmail.com";
+    public static final String MASTER = "msz@agh.edu.pl";
    //private static final String[] emailList = {"adam.buczek17@gmail.com"};
     private String username;
 

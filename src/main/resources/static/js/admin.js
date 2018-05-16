@@ -56,14 +56,16 @@ function pobierz_dane(fileName){
     $.ajax({
         url: "http://localhost:8080/api/"+fileName+"/calc/info",
         type : "get",
-    }).then(function(data) {
-        $("#nazwisko").val(data.nazwisko);
-        $("#imie").val(data.imie);
-        $("#przedmioty_od").val(data.przedmioty_od);
-        $("#przedmioty_do").val(data.przedmioty_do);
-        $("#podsumowanie_od").val(data.podsumowanie_od);
-        $("#podsumowanie_do").val(data.podsumowanie_do);
-        $("#przedmioty").val(data.przedmioty);
+    }).then(function(data, status, jqxhr) {
+        
+            $("#nazwisko").val(data.nazwisko);
+            $("#imie").val(data.imie);
+            $("#przedmioty_od").val(data.przedmioty_od);
+            $("#przedmioty_do").val(data.przedmioty_do);
+            $("#podsumowanie_od").val(data.podsumowanie_od);
+            $("#podsumowanie_do").val(data.podsumowanie_do);
+            $("#przedmioty").val(data.przedmioty);
+
 
     })
 }
